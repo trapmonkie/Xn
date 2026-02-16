@@ -9,16 +9,16 @@
     <style>
         :root { 
             --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; 
-            --speed: 0.2s;
+            --accent: #007aff;
         }
         [data-theme="dark"] { 
             --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; 
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { 
             font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); 
-            padding: 24px; transition: background-color var(--speed), color var(--speed);
+            padding: 24px; transition: background-color 0.15s ease;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -30,34 +30,46 @@
         .side-actions { display: flex; flex-direction: column; gap: 12px; }
         .icon-btn { 
             background: var(--panel); border: 1px solid var(--border); 
-            border-radius: 50%; width: 40px; height: 40px; 
+            border-radius: 50%; width: 44px; height: 44px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: all var(--speed); -webkit-tap-highlight-color: transparent;
+            transition: transform 0.1s ease;
         }
-        .icon-btn svg { width: 20px; height: 20px; stroke: var(--sub); stroke-width: 2; fill: none; }
-        [data-theme="dark"] .icon-btn svg { stroke: var(--text); }
+        .icon-btn:active { transform: scale(0.92); }
+        .icon-btn svg { width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; }
 
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 11px; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.05em; }
         input { 
             width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); 
-            background: var(--bg); color: var(--text); font-size: 16px; outline: none; 
-            transition: border-color var(--speed);
+            background: var(--panel); color: var(--text); font-size: 16px; outline: none; 
+            transition: border-color 0.2s;
         }
         input:focus { border-color: var(--sub); }
 
-        .result-card { background: var(--panel); border-radius: 20px; padding: 24px; margin-top: 24px; border: 1px solid var(--border); }
+        .result-card { 
+            background: var(--panel); border-radius: 20px; padding: 24px; 
+            margin-top: 24px; border: 1px solid var(--border);
+            display: none; /* Hidden by default */
+        }
         .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
         .steps-container { max-height: 280px; overflow-y: auto; font-family: ui-monospace, monospace; font-size: 14px; border-top: 1px solid var(--border); padding-top: 16px; }
-        .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
 
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
         .action-btn {
             padding: 14px; border-radius: 12px; border: 1px solid var(--border);
             background: var(--bg); color: var(--text); font-size: 14px; font-weight: 600;
-            cursor: pointer; transition: opacity 0.1s; -webkit-tap-highlight-color: transparent;
+            cursor: pointer; transition: all 0.1s ease;
+            display: flex; align-items: center; justify-content: center;
         }
-        .action-btn:active { opacity: 0.5; }
+        .action-btn:active { transform: scale(0.96); background: var(--border); }
+        
+        /* Toast notification for copy */
+        #toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            background: #323232; color: white; padding: 12px 24px; border-radius: 25px;
+            font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100;
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -68,21 +80,19 @@
                 <p class="subline">Calculate the exact number of growth multiplications needed.</p>
             </div>
             <div class="side-actions">
-                <div class="icon-btn" id="theme-btn" aria-label="Toggle Theme"></div>
-                <div class="icon-btn" onclick="alert('To install: Tap the Share button (square with arrow) at the bottom of Safari, then select Add to Home Screen.')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
+                <div class="icon-btn" id="theme-btn"></div>
+                <div class="icon-btn" onclick="showInstallInfo()">
+                    <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 </div>
             </div>
         </div>
 
-        <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" value="$25.00"></div>
-        <div class="input-group"><label>Multiplier (x)</label><input type="number" id="multiplier" value="3" step="any"></div>
-        <div class="input-group"><label>Target Amount ($)</label><input type="text" id="target" value="$1,000,000.00"></div>
+        <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" placeholder="e.g. 25"></div>
+        <div class="input-group"><label>Multiplier (x)</label><input type="number" id="multiplier" placeholder="e.g. 3" step="any"></div>
+        <div class="input-group"><label>Target Amount ($)</label><input type="text" id="target" placeholder="e.g. 1,000,000"></div>
 
-        <div class="result-card">
-            <div id="summary" class="summary-text">Ready to calculate...</div>
+        <div id="result-card" class="result-card">
+            <div id="summary" class="summary-text"></div>
             <div id="steps" class="steps-container"></div>
             
             <div class="action-grid">
@@ -92,12 +102,32 @@
         </div>
     </div>
 
-    <script>
-        const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), targetInp = document.getElementById('target'), summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps'), themeBtn = document.getElementById('theme-btn');
-        const sun = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`, moon = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+    <div id="toast">Copied to Clipboard!</div>
 
-        function setTheme(t) { document.body.setAttribute('data-theme', t); themeBtn.innerHTML = t === 'light' ? moon : sun; localStorage.setItem('calculator-theme', t); }
-        themeBtn.onclick = () => setTheme(document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    <script>
+        const startInp = document.getElementById('start'), 
+              multInp = document.getElementById('multiplier'), 
+              targetInp = document.getElementById('target'), 
+              resCard = document.getElementById('result-card'),
+              summaryEl = document.getElementById('summary'), 
+              stepsEl = document.getElementById('steps'), 
+              themeBtn = document.getElementById('theme-btn'),
+              toast = document.getElementById('toast');
+
+        const sun = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`, 
+              moon = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+
+        function setTheme(t) {
+            document.body.setAttribute('data-theme', t);
+            themeBtn.innerHTML = t === 'light' ? moon : sun;
+            localStorage.setItem('calculator-theme', t);
+        }
+
+        themeBtn.onclick = () => {
+            const current = document.body.getAttribute('data-theme');
+            setTheme(current === 'light' ? 'dark' : 'light');
+        };
+        
         setTheme(localStorage.getItem('calculator-theme') || 'light');
 
         const cleanNum = (s) => parseFloat(s.replace(/[^0-9.-]+/g, "")) || 0;
@@ -105,7 +135,13 @@
 
         function calculate() {
             let cur = cleanNum(startInp.value), m = parseFloat(multInp.value) || 0, goal = cleanNum(targetInp.value);
-            if (cur <= 0 || m <= 1) { summaryEl.innerText = "Invalid input"; stepsEl.innerHTML = ""; return; }
+            
+            if (cur <= 0 || m <= 1 || goal <= cur) {
+                resCard.style.display = 'none';
+                return;
+            }
+
+            resCard.style.display = 'block';
             let count = 0, out = "";
             while (cur < goal && count < 200) {
                 let next = cur * m; count++;
@@ -119,25 +155,26 @@
         function copyResults() {
             const text = `${summaryEl.innerText}\n\n` + Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n');
             navigator.clipboard.writeText(text).then(() => {
-                const original = summaryEl.innerText;
-                summaryEl.innerText = "Copied to Clipboard!";
-                setTimeout(() => summaryEl.innerText = original, 1500);
+                toast.style.opacity = "1";
+                setTimeout(() => toast.style.opacity = "0", 2000);
             });
         }
 
         function shareResults() {
-            const text = `${summaryEl.innerText}\nCheck out these multiplication steps:`;
             if (navigator.share) {
-                navigator.share({ title: 'Multiplication Steps', text: text, url: window.location.href });
+                navigator.share({ title: 'Multiplication Steps', text: summaryEl.innerText, url: window.location.href });
             } else { copyResults(); }
         }
 
+        function showInstallInfo() {
+            alert('To install: Tap the Share button (square with arrow) at the bottom of Safari, then select Add to Home Screen.');
+        }
+
         [startInp, targetInp].forEach(el => {
-            el.addEventListener('blur', () => { el.value = fmt(cleanNum(el.value)); });
+            el.addEventListener('blur', () => { if(el.value) el.value = fmt(cleanNum(el.value)); });
             el.addEventListener('input', calculate);
         });
         multInp.oninput = calculate;
-        calculate();
     </script>
 </body>
 </html>
