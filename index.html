@@ -6,33 +6,67 @@
     <title>Multiply to Million</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; }
-        [data-theme="dark"] { --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; }
+        :root { 
+            --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; 
+            --speed: 0.2s; /* Faster for a snappier, premium feel */
+        }
+        [data-theme="dark"] { 
+            --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; 
+        }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: 0.3s; line-height: 1.4; }
-        .container { max-width: 480px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 32px; gap: 16px; }
         
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            padding: 24px; 
+            line-height: 1.4;
+            /* Hardware acceleration for smoother transitions */
+            transition: background-color var(--speed) ease, color var(--speed) ease;
+            will-change: background-color;
+        }
+
+        .container { max-width: 480px; margin: 0 auto; }
+        
+        .header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 32px; gap: 16px; }
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
         .subline { color: var(--sub); font-size: 15px; font-weight: 400; }
 
         .theme-toggle { 
-            background: var(--panel); border: 1px solid var(--border); 
+            background: var(--panel); 
+            border: 1px solid var(--border); 
             border-radius: 50%; width: 40px; height: 40px; min-width: 40px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer;
+            transition: background-color var(--speed) ease, border-color var(--speed) ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent; /* Removes mobile tap flash */
         }
-        .theme-toggle svg { width: 20px; height: 20px; stroke: var(--sub); stroke-width: 2; fill: none; }
+
+        .theme-toggle svg { 
+            width: 20px; height: 20px; stroke: var(--sub); stroke-width: 2; fill: none; 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Rotates the icon during toggle for a fluid feel */
+        [data-theme="dark"] .theme-toggle svg { transform: rotate(360deg); }
 
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 12px; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; font-weight: 600; }
+        
         input { 
             width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); 
             background: var(--bg); color: var(--text); font-size: 16px; outline: none; 
+            transition: background-color var(--speed) ease, border-color var(--speed) ease, color var(--speed) ease;
         }
         input:focus { border-color: var(--sub); }
         
-        .result-card { background: var(--panel); border-radius: 16px; padding: 20px; margin-top: 24px; border: 1px solid var(--border); }
+        .result-card { 
+            background: var(--panel); border-radius: 16px; padding: 20px; margin-top: 24px; 
+            border: 1px solid var(--border); 
+            transition: background-color var(--speed) ease, border-color var(--speed) ease;
+        }
+        
         .summary-text { font-weight: 600; font-size: 18px; margin-bottom: 12px; color: var(--text); }
         .steps-container { max-height: 300px; overflow-y: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; border-top: 1px solid var(--border); padding-top: 12px; }
         .step-row { padding: 6px 0; color: var(--sub); border-bottom: 1px solid rgba(0,0,0,0.02); }
@@ -80,7 +114,7 @@
         const sun = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
         const moon = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
 
-        // Theme Toggle Logic
+        // Optimized Theme Logic
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             themeBtn.innerHTML = theme === 'light' ? moon : sun;
@@ -92,29 +126,21 @@
             setTheme(isLight ? 'dark' : 'light');
         };
         
-        // Load saved theme or default
         setTheme(localStorage.getItem('calculator-theme') || 'light');
 
         // --- Formatting & Math Helpers ---
         
-        // Removes $ and commas for math
-        const cleanNum = (str) => {
-            return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
-        };
+        const cleanNum = (str) => parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
 
-        // Formats number to USD style
         const fmt = (n) => new Intl.NumberFormat('en-US', { 
             style: 'currency', 
             currency: 'USD',
             minimumFractionDigits: 2
         }).format(n);
 
-        // Formats the input field while user is typing
         function formatInput(el) {
             let val = cleanNum(el.value);
             if (val === 0 && el.value === "") return;
-            
-            // Only format if not currently typing a decimal
             if (!el.value.endsWith('.')) {
                 el.value = fmt(val);
             }
@@ -141,7 +167,6 @@
             let output = "";
             let tempCurrent = current;
 
-            // Safety cap of 200 steps
             while (tempCurrent < goal && count < 200) {
                 let next = tempCurrent * m;
                 count++;
@@ -153,18 +178,12 @@
             stepsEl.innerHTML = output;
         }
 
-        // --- Listeners ---
-
         [startInp, targetInp].forEach(el => {
-            // Format when user finishes typing or clicks away
             el.addEventListener('blur', () => formatInput(el));
-            // Calculate in real-time
             el.addEventListener('input', calculate);
         });
 
         multInp.oninput = calculate;
-
-        // Run initial calculation
         calculate();
     </script>
 </body>
