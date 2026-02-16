@@ -6,19 +6,20 @@
     <title>Multiply to Million</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* YOUR ORIGINAL UI STYLES - DO NOT CHANGE */
         :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; }
         [data-theme="dark"] { --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: 0.3s; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: 0.3s; line-height: 1.4; }
         .container { max-width: 480px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 32px; gap: 16px; }
         
-        /* Minimalist Icon Toggle styling */
+        h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+        .subline { color: var(--sub); font-size: 15px; font-weight: 400; }
+
         .theme-toggle { 
             background: var(--panel); border: 1px solid var(--border); 
-            border-radius: 50%; width: 40px; height: 40px; 
+            border-radius: 50%; width: 40px; height: 40px; min-width: 40px;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
         .theme-toggle svg { width: 20px; height: 20px; stroke: var(--sub); stroke-width: 2; fill: none; }
@@ -29,33 +30,36 @@
             width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); 
             background: var(--bg); color: var(--text); font-size: 16px; outline: none; 
         }
+        input:focus { border-color: var(--sub); }
         
-        /* Result area matching your original "Result Card" look */
         .result-card { background: var(--panel); border-radius: 16px; padding: 20px; margin-top: 24px; border: 1px solid var(--border); }
-        .summary-text { font-weight: 600; font-size: 18px; margin-bottom: 12px; }
-        .steps-container { max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
-        .step-row { padding: 6px 0; color: var(--sub); }
+        .summary-text { font-weight: 600; font-size: 18px; margin-bottom: 12px; color: var(--text); }
+        .steps-container { max-height: 300px; overflow-y: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; border-top: 1px solid var(--border); padding-top: 12px; }
+        .step-row { padding: 6px 0; color: var(--sub); border-bottom: 1px solid rgba(0,0,0,0.02); }
+        [data-theme="dark"] .step-row { border-bottom: 1px solid rgba(255,255,255,0.02); }
     </style>
 </head>
 <body data-theme="light">
     <div class="container">
         <div class="header">
-            <h1>Calculator</h1>
-            <div class="theme-toggle" id="theme-btn">
-                </div>
+            <div>
+                <h1>How Many Steps to Reach $1,000,000?</h1>
+                <p class="subline">Calculate the exact number of growth multiplications needed to reach any target.</p>
+            </div>
+            <div class="theme-toggle" id="theme-btn" aria-label="Toggle Theme"></div>
         </div>
 
         <div class="input-group">
             <label>Starting Amount ($)</label>
-            <input type="number" id="start" value="25">
+            <input type="text" id="start" value="$25.00">
         </div>
         <div class="input-group">
             <label>Multiplier (x)</label>
-            <input type="number" id="multiplier" value="3">
+            <input type="number" id="multiplier" value="3" step="any">
         </div>
         <div class="input-group">
             <label>Target Amount ($)</label>
-            <input type="number" id="target" value="1000000">
+            <input type="text" id="target" value="$1,000,000.00">
         </div>
 
         <div class="result-card">
@@ -77,23 +81,49 @@
         const moon = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
 
         // Theme Toggle Logic
-        function toggleTheme() {
-            const current = document.body.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            document.body.setAttribute('data-theme', next);
-            themeBtn.innerHTML = next === 'light' ? moon : sun;
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            themeBtn.innerHTML = theme === 'light' ? moon : sun;
+            localStorage.setItem('calculator-theme', theme);
         }
-        themeBtn.onclick = toggleTheme;
-        themeBtn.innerHTML = moon; // Default icon
+        
+        themeBtn.onclick = () => {
+            const isLight = document.body.getAttribute('data-theme') === 'light';
+            setTheme(isLight ? 'dark' : 'light');
+        };
+        
+        // Load saved theme or default
+        setTheme(localStorage.getItem('calculator-theme') || 'light');
 
-        // Formatting
-        const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+        // --- Formatting & Math Helpers ---
+        
+        // Removes $ and commas for math
+        const cleanNum = (str) => {
+            return parseFloat(str.replace(/[^0-9.-]+/g, "")) || 0;
+        };
 
-        // Real-Time Calculation Engine
+        // Formats number to USD style
+        const fmt = (n) => new Intl.NumberFormat('en-US', { 
+            style: 'currency', 
+            currency: 'USD',
+            minimumFractionDigits: 2
+        }).format(n);
+
+        // Formats the input field while user is typing
+        function formatInput(el) {
+            let val = cleanNum(el.value);
+            if (val === 0 && el.value === "") return;
+            
+            // Only format if not currently typing a decimal
+            if (!el.value.endsWith('.')) {
+                el.value = fmt(val);
+            }
+        }
+
         function calculate() {
-            let current = parseFloat(startInp.value) || 0;
+            let current = cleanNum(startInp.value);
             const m = parseFloat(multInp.value) || 0;
-            const goal = parseFloat(targetInp.value) || 0;
+            const goal = cleanNum(targetInp.value);
 
             if (current <= 0 || m <= 1) {
                 summaryEl.innerText = "Enter valid numbers";
@@ -101,22 +131,41 @@
                 return;
             }
 
+            if (current >= goal) {
+                summaryEl.innerText = "Target already reached";
+                stepsEl.innerHTML = `<div class="step-row">Starting amount ${fmt(current)} is already greater than or equal to ${fmt(goal)}.</div>`;
+                return;
+            }
+
             let count = 0;
             let output = "";
-            while (current < goal && count < 100) {
-                let next = current * m;
+            let tempCurrent = current;
+
+            // Safety cap of 200 steps
+            while (tempCurrent < goal && count < 200) {
+                let next = tempCurrent * m;
                 count++;
-                output += `<div class="step-row">${count}. ${fmt(current)} × ${m} = ${fmt(next)}</div>`;
-                current = next;
+                output += `<div class="step-row"><b>Step ${count}:</b> ${fmt(tempCurrent)} × ${m} = ${fmt(next)}</div>`;
+                tempCurrent = next;
             }
 
             summaryEl.innerText = `${count} steps to exceed ${fmt(goal)}`;
             stepsEl.innerHTML = output;
         }
 
-        // Listen for typing (Real-time)
-        [startInp, multInp, targetInp].forEach(el => el.oninput = calculate);
-        calculate(); // Initial run
+        // --- Listeners ---
+
+        [startInp, targetInp].forEach(el => {
+            // Format when user finishes typing or clicks away
+            el.addEventListener('blur', () => formatInput(el));
+            // Calculate in real-time
+            el.addEventListener('input', calculate);
+        });
+
+        multInp.oninput = calculate;
+
+        // Run initial calculation
+        calculate();
     </script>
 </body>
 </html>
