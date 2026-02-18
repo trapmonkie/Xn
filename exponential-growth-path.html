@@ -1,0 +1,16 @@
+<section class="content-section">
+    <h2> Exponential Growth: 2ⁿ vs 3ⁿ vs 4ⁿ</h2>
+    <div class="graph-container">
+        <svg class="graph-svg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+            <line x1="40" y1="180" x2="360" y2="180" stroke="var(--border)"/>
+            <line x1="40" y1="180" x2="40" y2="20" stroke="var(--border)"/>
+            <!-- 2ⁿ (dashed) -->
+            <polyline points="40,170 100,150 160,120 220,80 280,40 340,10" class="graph-line" stroke="var(--accent)" stroke-dasharray="4"/>
+            <!-- 3ⁿ (solid) -->
+            <polyline points="40,170 100,140 160,100 220,50 280,20 340,5" class="graph-line" stroke="var(--accent)"/>
+            <!-- 4ⁿ (dotted) -->
+            <polyline points="40,170 100,130 160,70 220,20 280,5 340,2" class="graph-line" stroke="var(--accent)" stroke-dasharray="2 2"/>
+        </svg>
+        <p style="margin-top:8px; font-size:13px; color:var(--sub);">Dashed: 2ⁿ, Solid: 3ⁿ, Dotted: 4ⁿ</p>
+    </div>
+</section>
