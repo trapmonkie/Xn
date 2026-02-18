@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <link rel="icon" href="/xn-compound-growth-multiplier-favicon.PNG" type="image/png" sizes="100x100">
+  
     <link rel="shortcut icon" href="/xn-compound-growth-multiplier-favicon.PNG">
-    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG">
 
     <title>Xn | How Many Steps to $1,000,000?</title>
     
@@ -45,6 +45,7 @@
             margin-bottom: 20px; 
         }
 
+        /* REVERTED HEADER LOGO */
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
         .side-actions { display: flex; gap: 12px; }
 
@@ -178,17 +179,11 @@
         }
 
         async function shareResults() {
-            // Check if results are currently visible
-            const hasResults = resCard.style.display === 'block';
-            
             const shareData = {
                 title: 'Xn Math Results',
-                text: hasResults 
-                    ? (summaryEl.innerText + "\nCheck my path to a million:") 
-                    : "Triple to a million challenge",
+                text: summaryEl.innerText + "\nCheck my path to a million:",
                 url: window.location.href
             };
-
             try {
                 if (navigator.share) {
                     await navigator.share(shareData);
