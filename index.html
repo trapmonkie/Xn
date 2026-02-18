@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <link rel="icon" href="/xn-compound-growth-multiplier-favicon.PNG" type="image/png" sizes="100x100">
-  
     <link rel="shortcut icon" href="/xn-compound-growth-multiplier-favicon.PNG">
 
     <title>Xn | How Many Steps to $1,000,000?</title>
@@ -35,7 +34,14 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: background-color 0.4s ease; }
+        /* 1. UPDATE: Added transition to colors and backgrounds for smooth blending */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            padding: 24px; 
+            transition: background-color 0.4s ease, color 0.4s ease; 
+        }
 
         .container { max-width: 480px; margin: 0 auto; }
 
@@ -45,7 +51,6 @@
             margin-bottom: 20px; 
         }
 
-        /* REVERTED HEADER LOGO */
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
         .side-actions { display: flex; gap: 12px; }
 
@@ -54,12 +59,13 @@
             border-radius: 50%; width: 44px; height: 44px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             position: relative; overflow: hidden;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
         .icon-btn svg { 
             position: absolute; width: 20px; height: 20px; 
             stroke: var(--text); stroke-width: 2; fill: none;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, stroke 0.4s ease;
         }
         
         [data-theme="light"] .moon-icon { opacity: 1; transform: rotate(0); }
@@ -69,18 +75,22 @@
 
         .title-block { margin-bottom: 32px; }
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
-        .subline { color: var(--sub); font-size: 15px; margin-top: 4px; }
+        /* 1. UPDATE: Smooth subline color transition */
+        .subline { color: var(--sub); font-size: 15px; margin-top: 4px; transition: color 0.4s ease; }
 
+        /* 1. UPDATE: Smooth transition for input boxes */
         input { 
             width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); 
             background: var(--panel); color: var(--text); font-size: 16px; outline: none; margin-bottom: 20px;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, background-color 0.4s ease, color 0.4s ease;
         }
         input:focus { border-color: var(--accent); }
 
+        /* 1. UPDATE: Smooth transition for result card */
         .result-card { 
             background: var(--panel); border-radius: 20px; padding: 24px; 
             margin-top: 24px; border: 1px solid var(--border); display: none;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
         .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
@@ -88,17 +98,20 @@
         .steps-container { 
             max-height: 280px; overflow-y: auto; font-family: ui-monospace, monospace; 
             font-size: 14px; border-top: 1px solid var(--border); padding-top: 16px;
+            transition: border-color 0.4s ease;
         }
 
-        .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
+        /* 1. UPDATE: Smooth transition for step rows */
+        .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); transition: color 0.4s ease, border-color 0.4s ease; }
         
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
         
+        /* 1. UPDATE: Smooth transition for action buttons */
         .action-btn { 
             background: var(--btn-bg); border: 1px solid var(--border); 
             padding: 14px; border-radius: 12px; color: var(--text); 
             font-size: 14px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
         }
 
         .action-btn.success { 
@@ -204,7 +217,13 @@
             const t = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', t);
         };
-        window.onload = calculate;
+
+        // 2. UPDATE: Auto-format currency on load
+        window.onload = () => {
+            if(startInp.value) startInp.value = fmt(cleanNum(startInp.value));
+            if(targetInp.value) targetInp.value = fmt(cleanNum(targetInp.value));
+            calculate();
+        };
     </script>
 </body>
 </html>
