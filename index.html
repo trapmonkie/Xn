@@ -4,26 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>Xn | How Many Steps to $1,000,000?</title>
-    <meta name="title" content="Xn | How Many Steps to $1,000,000?">
-    <meta name="description" content="Calculate the exact growth path to $1,000,000. Reverse-engineer your wealth using the Xn exponential formula. Simple. Visual. Fast.">
+    <link rel="icon" type="image/png" href="xn-math-engine-logo.png">
+    <link rel="shortcut icon" href="xn-math-engine-logo.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="xn-math-engine-logo.png">
 
+    <title>Xn | How Many Steps to $1,000,000?</title>
+    
+    <meta name="title" content="Xn Math Results">
+    <meta name="description" content="Calculate your exact path to a million.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://multiplytomillion.vercel.app/">
-    <meta property="og:title" content="How Many Steps to $1,000,000?">
-    <meta property="og:description" content="Stop guessing. Use the Xn Math Engine to see your exact multiplication path to a million.">
-    <meta property="og:image" content="xn-exponential-growth-formula-steps-to-million-social-image.PNG">
+    <meta property="og:title" content="Xn Math Results">
+    <meta property="og:description" content="See the exact steps to reach your target goal.">
+    <meta property="og:image" content="xn-math-engine-logo.png"> 
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://multiplytomillion.vercel.app/">
-    <meta property="twitter:title" content="How Many Steps to $1,000,000?">
-    <meta property="twitter:description" content="The math engine for exponential growth. See the steps.">
-    <meta property="twitter:image" content="xn-exponential-growth-formula-steps-to-million-social-image.PNG">
-
-    <link rel="icon" type="image/png" href="favicon.PNG">
-    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG">
     <link rel="manifest" href="manifest.json">
-
     <meta name="theme-color" content="#007BFF">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -39,11 +34,7 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        body, input, .icon-btn, .result-card, .step-row, .action-btn { 
-            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; 
-        }
-
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: background-color 0.4s ease; }
 
         .container { max-width: 480px; margin: 0 auto; }
 
@@ -61,10 +52,8 @@
             border-radius: 50%; width: 44px; height: 44px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             position: relative; overflow: hidden;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* SPRINGY ROTATION ANIMATION */
         .icon-btn svg { 
             position: absolute; width: 20px; height: 20px; 
             stroke: var(--text); stroke-width: 2; fill: none;
@@ -80,13 +69,12 @@
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
         .subline { color: var(--sub); font-size: 15px; margin-top: 4px; }
 
-        .input-group { margin-bottom: 20px; }
-        label { display: block; font-size: 11px; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.05em; }
-        
         input { 
             width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); 
-            background: var(--panel); color: var(--text); font-size: 16px; outline: none;
+            background: var(--panel); color: var(--text); font-size: 16px; outline: none; margin-bottom: 20px;
+            transition: border-color 0.3s ease;
         }
+        input:focus { border-color: var(--accent); }
 
         .result-card { 
             background: var(--panel); border-radius: 20px; padding: 24px; 
@@ -96,8 +84,7 @@
         .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
 
         .steps-container { 
-            max-height: 280px; 
-            overflow-y: auto; font-family: ui-monospace, monospace; 
+            max-height: 280px; overflow-y: auto; font-family: ui-monospace, monospace; 
             font-size: 14px; border-top: 1px solid var(--border); padding-top: 16px;
         }
 
@@ -107,17 +94,16 @@
         
         .action-btn { 
             background: var(--btn-bg); border: 1px solid var(--border); 
-            width: 100%; padding: 14px; border-radius: 12px;
-            color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.4s ease;
+            padding: 14px; border-radius: 12px; color: var(--text); 
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .action-btn:active { transform: scale(0.94); }
 
-        /* Success state for Copy Button */
-        .action-btn.success {
-            background-color: #323232 !important;
-            color: #ffffff !important;
-            border-color: #323232 !important;
+        /* UPDATED SUCCESS COLOR TO MATCH HEADER BLUE */
+        .action-btn.success { 
+            background-color: var(--accent) !important; 
+            color: #ffffff !important; 
+            border-color: var(--accent) !important;
         }
     </style>
 </head>
@@ -141,29 +127,25 @@
             <p class="subline">Calculate exact growth multiplications.</p>
         </div>
 
-        <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" inputmode="decimal" placeholder="$25.00"></div>
-        <div class="input-group"><label>Multiplier (x)</label><input type="number" id="multiplier" inputmode="decimal" placeholder="3"></div>
-        <div class="input-group"><label>Target Amount ($)</label><input type="text" id="target" inputmode="decimal" placeholder="$1,000,000.00"></div>
+        <input type="text" id="start" inputmode="decimal" placeholder="Starting Amount ($25.00)">
+        <input type="number" id="multiplier" inputmode="decimal" placeholder="Multiplier (3)">
+        <input type="text" id="target" inputmode="decimal" placeholder="Target Amount ($1,000,000.00)">
 
         <div id="result-card" class="result-card">
             <div id="summary" class="summary-text"></div>
             <div id="steps" class="steps-container"></div>
             <div class="action-grid">
                 <button class="action-btn" id="copy-btn" onclick="copyResults()">Copy Results</button>
-                <button class="action-btn" onclick="shareResults()">Share</button>
+                <button class="action-btn" id="share-btn" onclick="shareResults()">Share</button>
             </div>
         </div>
     </div>
 
     <script>
-        const startInp = document.getElementById('start'), 
-              multInp = document.getElementById('multiplier'), 
-              targetInp = document.getElementById('target'), 
-              resCard = document.getElementById('result-card'),
-              summaryEl = document.getElementById('summary'), 
-              stepsEl = document.getElementById('steps'),
-              themeBtn = document.getElementById('theme-btn'),
-              copyBtn = document.getElementById('copy-btn');
+        const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), 
+              targetInp = document.getElementById('target'), resCard = document.getElementById('result-card'),
+              summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps'),
+              themeBtn = document.getElementById('theme-btn'), copyBtn = document.getElementById('copy-btn');
 
         const cleanNum = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
@@ -182,30 +164,33 @@
             stepsEl.innerHTML = out;
         }
 
-        // COPY FUNCTION
         function copyResults() {
             const text = `${summaryEl.innerText}\n\n` + Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n');
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = copyBtn.innerText;
                 copyBtn.innerText = "Copied!";
                 copyBtn.classList.add('success');
-                setTimeout(() => {
-                    copyBtn.innerText = originalText;
-                    copyBtn.classList.remove('success');
+                setTimeout(() => { 
+                    copyBtn.innerText = originalText; 
+                    copyBtn.classList.remove('success'); 
                 }, 1500);
             });
         }
 
-        // SHARE FUNCTION
-        function shareResults() {
-            if (navigator.share) {
-                navigator.share({ 
-                    title: 'Xn Math Results', 
-                    text: summaryEl.innerText, 
-                    url: window.location.href 
-                });
-            } else { 
-                copyResults(); 
+        async function shareResults() {
+            const shareData = {
+                title: 'Xn Math Results',
+                text: summaryEl.innerText + "\nCheck my path to a million:",
+                url: window.location.href
+            };
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    copyResults();
+                }
+            } catch (err) {
+                console.log("Share failed:", err);
             }
         }
 
@@ -214,14 +199,11 @@
             el.addEventListener('blur', () => { if(el.value) el.value = fmt(cleanNum(el.value)); });
         });
         multInp.addEventListener('input', calculate);
-
         themeBtn.onclick = () => {
             const t = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', t);
         };
-        
         window.onload = calculate;
-        document.addEventListener("touchstart", function() {}, true);
     </script>
 </body>
 </html>
