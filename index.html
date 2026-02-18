@@ -40,9 +40,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
         body, input, .icon-btn, .result-card, .step-row, .action-btn { 
-            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; 
         }
 
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
@@ -56,25 +54,27 @@
         }
 
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
-        .side-actions { display: flex; gap: 10px; }
+        .side-actions { display: flex; gap: 12px; }
 
         .icon-btn { 
             background: var(--panel); border: 1px solid var(--border); 
             border-radius: 50%; width: 44px; height: 44px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             position: relative; overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        /* SPRINGY ROTATION ANIMATION */
         .icon-btn svg { 
-            width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; 
-            position: absolute;
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+            position: absolute; width: 20px; height: 20px; 
+            stroke: var(--text); stroke-width: 2; fill: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
         }
-
-        [data-theme="light"] .sun-icon { transform: rotate(180deg); opacity: 0; }
-        [data-theme="light"] .moon-icon { transform: rotate(0deg); opacity: 1; }
-        [data-theme="dark"] .sun-icon { transform: rotate(0deg); opacity: 1; }
-        [data-theme="dark"] .moon-icon { transform: rotate(-180deg); opacity: 0; }
+        
+        [data-theme="light"] .moon-icon { opacity: 1; transform: rotate(0); }
+        [data-theme="light"] .sun-icon { opacity: 0; transform: rotate(90deg); }
+        [data-theme="dark"] .moon-icon { opacity: 0; transform: rotate(-90deg); }
+        [data-theme="dark"] .sun-icon { opacity: 1; transform: rotate(0); }
 
         .title-block { margin-bottom: 32px; }
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
@@ -89,25 +89,35 @@
         }
 
         .result-card { 
-            background: var(--panel); border-radius: 20px; padding: 20px; 
+            background: var(--panel); border-radius: 20px; padding: 24px; 
             margin-top: 24px; border: 1px solid var(--border); display: none;
         }
 
         .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
 
         .steps-container { 
-            max-height: 480px; 
+            max-height: 280px; 
             overflow-y: auto; font-family: ui-monospace, monospace; 
-            font-size: 14px; border-top: 1px solid var(--border); 
+            font-size: 14px; border-top: 1px solid var(--border); padding-top: 16px;
         }
 
-        .step-row { padding: 14px 0; color: var(--sub); border-bottom: 1px solid var(--border); line-height: 1.4; }
+        .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
         
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+        
         .action-btn { 
             background: var(--btn-bg); border: 1px solid var(--border); 
             width: 100%; padding: 14px; border-radius: 12px;
             color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.4s ease;
+        }
+        .action-btn:active { transform: scale(0.94); }
+
+        /* Success state for Copy Button */
+        .action-btn.success {
+            background-color: #323232 !important;
+            color: #ffffff !important;
+            border-color: #323232 !important;
         }
     </style>
 </head>
@@ -125,10 +135,12 @@
                 </div>
             </div>
         </div>
+
         <div class="title-block">
             <h1>How Many Steps to $1,000,000?</h1>
             <p class="subline">Calculate exact growth multiplications.</p>
         </div>
+
         <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" inputmode="decimal" placeholder="$25.00"></div>
         <div class="input-group"><label>Multiplier (x)</label><input type="number" id="multiplier" inputmode="decimal" placeholder="3"></div>
         <div class="input-group"><label>Target Amount ($)</label><input type="text" id="target" inputmode="decimal" placeholder="$1,000,000.00"></div>
@@ -137,16 +149,21 @@
             <div id="summary" class="summary-text"></div>
             <div id="steps" class="steps-container"></div>
             <div class="action-grid">
-                <button class="action-btn" id="copy-btn">Copy Results</button>
-                <button class="action-btn">Share</button>
+                <button class="action-btn" id="copy-btn" onclick="copyResults()">Copy Results</button>
+                <button class="action-btn" onclick="shareResults()">Share</button>
             </div>
         </div>
     </div>
+
     <script>
-        const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), 
-              targetInp = document.getElementById('target'), resCard = document.getElementById('result-card'),
-              summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps'),
-              themeBtn = document.getElementById('theme-btn');
+        const startInp = document.getElementById('start'), 
+              multInp = document.getElementById('multiplier'), 
+              targetInp = document.getElementById('target'), 
+              resCard = document.getElementById('result-card'),
+              summaryEl = document.getElementById('summary'), 
+              stepsEl = document.getElementById('steps'),
+              themeBtn = document.getElementById('theme-btn'),
+              copyBtn = document.getElementById('copy-btn');
 
         const cleanNum = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
@@ -156,13 +173,40 @@
             if (cur <= 0 || m <= 1 || goal <= cur) { resCard.style.display = 'none'; return; }
             resCard.style.display = 'block';
             let count = 0, out = "", safety = 0;
-            while (cur < goal && safety < 500) {
+            while (cur < goal && safety < 200) {
                 let next = cur * m; count++;
                 out += `<div class="step-row"><b>Step ${count}:</b> ${fmt(cur)} × ${m} = ${fmt(next)}</div>`;
                 cur = next; safety++;
             }
             summaryEl.innerText = `${count} steps to exceed ${fmt(goal)}`;
             stepsEl.innerHTML = out;
+        }
+
+        // COPY FUNCTION
+        function copyResults() {
+            const text = `${summaryEl.innerText}\n\n` + Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = "Copied!";
+                copyBtn.classList.add('success');
+                setTimeout(() => {
+                    copyBtn.innerText = originalText;
+                    copyBtn.classList.remove('success');
+                }, 1500);
+            });
+        }
+
+        // SHARE FUNCTION
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({ 
+                    title: 'Xn Math Results', 
+                    text: summaryEl.innerText, 
+                    url: window.location.href 
+                });
+            } else { 
+                copyResults(); 
+            }
         }
 
         [startInp, targetInp].forEach(el => {
@@ -175,7 +219,9 @@
             const t = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', t);
         };
+        
         window.onload = calculate;
+        document.addEventListener("touchstart", function() {}, true);
     </script>
 </body>
 </html>
