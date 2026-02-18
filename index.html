@@ -7,13 +7,11 @@
     <title>Xn | Triple to Million</title>
     <meta name="description" content="Calculate exactly how many steps it takes to reach $1,000,000.">
     
-    <meta name="theme-color" content="#007BFF">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="tripletomillion-math-engine-favicon-day.PNG">
+    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.PNG">
+    <link rel="manifest" href="manifest.json">
 
-    <link rel="icon" href="tripletomillion-math-engine-favicon-day.PNG?v=2" media="(prefers-color-scheme: light)">
-    <link rel="icon" href="tripletomillion-math-engine-favicon-night.PNG?v=2" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.PNG?v=2">
-    <link rel="manifest" href="manifest.json?v=2">
+    <meta name="theme-color" content="#007BFF">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -34,22 +32,17 @@
             padding: 24px; transition: background-color 0.4s ease;
         }
 
-        /* Fixed Blue Bar for Top of App */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; right: 0; height: 4px;
-            background: var(--accent); z-index: 9999;
-        }
-
         .container { max-width: 480px; margin: 0 auto; }
 
+        /* Blue Line integrated into header to prevent overlaying info */
         .header-top-row { 
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-bottom: 20px; border-top: 4px solid var(--accent); padding-top: 15px;
+            margin-bottom: 20px; 
         }
 
-        /* Fixed Logo Size to prevent error */
         .logo-img {
-            width: 52px; height: 52px; object-fit: contain; border-radius: 12px;
-            background: var(--accent); /* Fallback color */
+            width: 44px; height: 44px; object-fit: contain;
         }
 
         .side-actions { display: flex; gap: 10px; }
@@ -61,12 +54,11 @@
             background: var(--panel); border: 1px solid var(--border); 
             border-radius: 50%; width: 44px; height: 44px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer;
-            position: relative; overflow: hidden;
         }
-        .icon-btn svg { position: absolute; width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; }
+        .icon-btn svg { width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; }
         
-        [data-theme="light"] .sun-icon { opacity: 0; }
-        [data-theme="dark"] .moon-icon { opacity: 0; }
+        [data-theme="light"] .sun-icon { display: none; }
+        [data-theme="dark"] .moon-icon { display: none; }
 
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 11px; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.05em; }
@@ -76,20 +68,20 @@
         }
 
         .result-card { 
-            background: var(--panel); border-radius: 20px; padding: 24px; 
+            background: var(--panel); border-radius: 20px; padding: 20px; 
             margin-top: 24px; border: 1px solid var(--border); display: none;
         }
 
         .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
 
-        /* Logic for exactly 10 steps height before scrolling */
+        /* Adjusted Height to show exactly 10 steps before scrolling */
         .steps-container { 
-            max-height: 380px; /* Adjusts to fit exactly ~10 steps */
+            max-height: 440px; 
             overflow-y: auto; font-family: ui-monospace, monospace; 
             font-size: 14px; border-top: 1px solid var(--border); 
         }
 
-        .step-row { padding: 10px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
+        .step-row { padding: 12px 0; color: var(--sub); border-bottom: 1px solid var(--border); line-height: 1.4; }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
         
         .action-btn { 
@@ -99,13 +91,17 @@
         }
     </style>
 </head>
-<body data-theme="dark"> <div class="container">
+<body data-theme="dark">
+    <div class="container">
         <div class="header-top-row">
             <img src="xn-triple-math-formulas-educational-multiplier-software-multiply-to-million-calculator-how-many-steps-logo.PNG" 
-                 alt="X" class="logo-img">
+                 alt="Logo" class="logo-img">
             <div class="side-actions">
-                <div class="icon-btn" id="theme-btn"><svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>
-                <div class="icon-btn" onclick="alert('Add to Home Screen for the full App experience.')">
+                <div class="icon-btn" id="theme-btn">
+                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                </div>
+                <div class="icon-btn" onclick="alert('Tap Share > Add to Home Screen.')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 </div>
             </div>
@@ -116,9 +112,9 @@
             <p class="subline">Calculate exact growth multiplications.</p>
         </div>
 
-        <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" inputmode="decimal" value="$25.00"></div>
-        <div class="input-group"><label>Multiplier (x)</label><input type="number" id="multiplier" inputmode="decimal" value="3"></div>
-        <div class="input-group"><label>Target Amount ($)</label><input type="text" id="target" inputmode="decimal" value="$1,000,000.00"></div>
+        <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" inputmode="decimal" placeholder="$25.00"></div>
+        <div class="input-group"><label>Multiplier (x)</label><input type="number" id="multiplier" inputmode="decimal" placeholder="3"></div>
+        <div class="input-group"><label>Target Amount ($)</label><input type="text" id="target" inputmode="decimal" placeholder="$1,000,000.00"></div>
 
         <div id="result-card" class="result-card">
             <div id="summary" class="summary-text"></div>
@@ -131,18 +127,29 @@
     </div>
 
     <script>
-        const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), 
-              targetInp = document.getElementById('target'), resCard = document.getElementById('result-card'),
-              summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps');
+        const startInp = document.getElementById('start'), 
+              multInp = document.getElementById('multiplier'), 
+              targetInp = document.getElementById('target'), 
+              resCard = document.getElementById('result-card'),
+              summaryEl = document.getElementById('summary'), 
+              stepsEl = document.getElementById('steps');
 
         const cleanNum = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
         function calculate() {
-            let cur = cleanNum(startInp.value), m = parseFloat(multInp.value) || 0, goal = cleanNum(targetInp.value);
-            if (cur <= 0 || m <= 1 || goal <= cur) { resCard.style.display = 'none'; return; }
+            let cur = cleanNum(startInp.value), 
+                m = parseFloat(multInp.value) || 0, 
+                goal = cleanNum(targetInp.value);
+            
+            if (cur <= 0 || m <= 1 || goal <= cur) { 
+                resCard.style.display = 'none'; 
+                return; 
+            }
+            
             resCard.style.display = 'block';
             let count = 0, out = "", safety = 0;
+            
             while (cur < goal && safety < 500) {
                 let next = cur * m;
                 count++;
@@ -154,10 +161,13 @@
             stepsEl.innerHTML = out;
         }
 
-        [startInp, targetInp, multInp].forEach(el => el.addEventListener('input', calculate));
-        window.onload = calculate;
+        // Logic for formatting on blur but calculating on input
+        [startInp, targetInp].forEach(el => {
+            el.addEventListener('input', calculate);
+            el.addEventListener('blur', () => { if(el.value) el.value = fmt(cleanNum(el.value)); });
+        });
+        multInp.addEventListener('input', calculate);
 
-        // Theme Toggle logic
         document.getElementById('theme-btn').onclick = () => {
             const t = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', t);
