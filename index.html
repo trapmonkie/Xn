@@ -8,10 +8,10 @@
     <meta name="description" content="Calculate exactly how many steps it takes to reach $1,000,000. Use the Xn Exponential Growth Math Engine to map your path to wealth.">
     <meta name="theme-color" content="#007BFF">
 
-    <link rel="icon" href="tripletomillion-math-engine-favicon-day.png" media="(prefers-color-scheme: light)">
-    <link rel="icon" href="tripletomillion-math-engine-favicon-night.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="tripletomillion-math-engine-favicon-day.PNG" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="tripletomillion-math-engine-favicon-night.PNG" media="(prefers-color-scheme: dark)">
     
-    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png">
+    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.PNG">
     <link rel="manifest" href="manifest.json">
 
     <meta property="og:type" content="website">
@@ -45,11 +45,29 @@
         }
 
         .container { max-width: 480px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 32px; gap: 16px; }
+
+        /* Header Layout: Logo Left, Icons Right */
+        .header-top-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+
+        .logo-img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .side-actions { display: flex; gap: 10px; }
+        
+        /* Title and Subline underneath */
+        .title-block { margin-bottom: 32px; }
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
         .subline { color: var(--sub); font-size: 15px; margin-top: 4px; }
 
-        .side-actions { display: flex; flex-direction: column; gap: 12px; }
         .icon-btn { 
             background: var(--panel); border: 1px solid var(--border); 
             border-radius: 50%; width: 44px; height: 44px; 
@@ -106,11 +124,11 @@
 </head>
 <body data-theme="light">
     <div class="container">
-        <div class="header">
-            <div>
-                <h1>Xn: How Many Steps to $1,000,000?</h1>
-                <p class="subline">Calculate exact growth multiplications.</p>
-            </div>
+        <div class="header-top-row">
+            <img src="xn-triple-math-formulas-educational-multiplier-software-multiply-to-million-calculator-how-many-steps-logo.PNG" 
+                 alt="Xn Logo" 
+                 class="logo-img">
+            
             <div class="side-actions">
                 <div class="icon-btn" id="theme-btn" title="Toggle Theme">
                     <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -120,6 +138,11 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 </div>
             </div>
+        </div>
+
+        <div class="title-block">
+            <h1>How Many Steps to $1,000,000?</h1>
+            <p class="subline">Calculate exact growth multiplications.</p>
         </div>
 
         <div class="input-group"><label>Starting Amount ($)</label><input type="text" id="start" inputmode="decimal" placeholder="$25.00"></div>
@@ -146,7 +169,6 @@
               themeBtn = document.getElementById('theme-btn'),
               copyBtn = document.getElementById('copy-btn');
 
-        // Set initial theme
         const savedTheme = localStorage.getItem('calculator-theme') || 'light';
         document.body.setAttribute('data-theme', savedTheme);
 
@@ -215,8 +237,6 @@
             el.addEventListener('input', calculate);
         });
         multInp.oninput = calculate;
-        
-        // Prevents ghost clicks on mobile
         document.addEventListener("touchstart", function() {}, true);
     </script>
 </body>
