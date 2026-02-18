@@ -6,15 +6,16 @@
     
     <link rel="icon" href="/xn-compound-growth-multiplier-favicon.PNG" type="image/png" sizes="100x100">
     <link rel="shortcut icon" href="/xn-compound-growth-multiplier-favicon.PNG">
+    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG">
 
     <title>Xn | How Many Steps to $1,000,000?</title>
     
     <meta name="title" content="Xn Math Results">
-    <meta name="description" content="Calculate your exact path to a million.">
+    <meta name="description" content="Triple to a Million Challenge">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://multiplytomillion.vercel.app/">
     <meta property="og:title" content="Xn Math Results">
-    <meta property="og:description" content="See the exact steps to reach your target goal.">
+    <meta property="og:description" content="Triple to a Million Challenge">
     
     <meta property="og:image" content="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG"> 
 
@@ -34,12 +35,8 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        /* 1. UPDATE: Added transition to colors and backgrounds for smooth blending */
         body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            padding: 24px; 
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; 
             transition: background-color 0.4s ease, color 0.4s ease; 
         }
 
@@ -75,10 +72,8 @@
 
         .title-block { margin-bottom: 32px; }
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
-        /* 1. UPDATE: Smooth subline color transition */
         .subline { color: var(--sub); font-size: 15px; margin-top: 4px; transition: color 0.4s ease; }
 
-        /* 1. UPDATE: Smooth transition for input boxes */
         input { 
             width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); 
             background: var(--panel); color: var(--text); font-size: 16px; outline: none; margin-bottom: 20px;
@@ -86,7 +81,6 @@
         }
         input:focus { border-color: var(--accent); }
 
-        /* 1. UPDATE: Smooth transition for result card */
         .result-card { 
             background: var(--panel); border-radius: 20px; padding: 24px; 
             margin-top: 24px; border: 1px solid var(--border); display: none;
@@ -101,12 +95,10 @@
             transition: border-color 0.4s ease;
         }
 
-        /* 1. UPDATE: Smooth transition for step rows */
         .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); transition: color 0.4s ease, border-color 0.4s ease; }
         
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
         
-        /* 1. UPDATE: Smooth transition for action buttons */
         .action-btn { 
             background: var(--btn-bg); border: 1px solid var(--border); 
             padding: 14px; border-radius: 12px; color: var(--text); 
@@ -194,8 +186,9 @@
         async function shareResults() {
             const shareData = {
                 title: 'Xn Math Results',
-                text: summaryEl.innerText + "\nCheck my path to a million:",
-                url: window.location.href
+                // UPDATE: Text now specifically says "My path to a million"
+                text: "My path to a million:\n" + summaryEl.innerText,
+                url: 'https://multiplytomillion.vercel.app/' 
             };
             try {
                 if (navigator.share) {
@@ -218,7 +211,6 @@
             document.body.setAttribute('data-theme', t);
         };
 
-        // 2. UPDATE: Auto-format currency on load
         window.onload = () => {
             if(startInp.value) startInp.value = fmt(cleanNum(startInp.value));
             if(targetInp.value) targetInp.value = fmt(cleanNum(targetInp.value));
