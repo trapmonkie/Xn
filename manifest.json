@@ -1,20 +1,16 @@
 {
   "name": "Xn: Triple to Million Math Engine",
   "short_name": "Xn",
-  "start_url": "/",
+  "start_url": "/?v=2",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#007BFF",
   "icons": [
     {
-      "src": "xn-multiplytomillion-compound-wealth-calculator-app-icon-day.PNG",
+      "src": "xn-multiplytomillion-compound-wealth-calculator-app-icon-day.PNG?v=2",
       "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "xn-multiplytomillion-compound-wealth-calculator-app-icon-night.PNG",
-      "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
