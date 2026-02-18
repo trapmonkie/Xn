@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Xn | Triple to Million</title>
-    <meta name="description" content="Calculate exactly how many steps it takes to reach $1,000,000.">
     
-    <link rel="icon" href="tripletomillion-math-engine-favicon-day.PNG">
+    <link rel="icon" type="image/png" href="tripletomillion-math-engine-favicon-day.PNG">
     <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG">
     <link rel="manifest" href="manifest.json">
 
@@ -25,25 +24,33 @@
             --btn-bg: #000000;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            -webkit-tap-highlight-color: transparent; 
+        }
         
+        /* Unified transition for background, text, and panels */
+        body, input, .icon-btn, .result-card, .step-row { 
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; 
+        }
+
         body { 
-            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); 
-            padding: 24px; transition: background-color 0.4s ease;
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            padding: 24px; 
         }
 
         .container { max-width: 480px; margin: 0 auto; }
 
-        /* Blue Bar integrated as Header Border */
         .header-top-row { 
             display: flex; justify-content: space-between; align-items: center; 
             padding-bottom: 20px; border-top: 4px solid var(--accent); padding-top: 15px;
             margin-bottom: 20px; 
         }
 
-        .logo-img {
-            width: 44px; height: 44px; object-fit: contain;
-        }
+        .logo-img { width: 44px; height: 44px; object-fit: contain; }
 
         .side-actions { display: flex; gap: 10px; }
         .title-block { margin-bottom: 32px; }
@@ -55,13 +62,14 @@
             border-radius: 50%; width: 44px; height: 44px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-        .icon-btn svg { width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; }
+        .icon-btn svg { width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; transition: stroke 0.4s ease; }
         
         [data-theme="light"] .sun-icon { display: none; }
         [data-theme="dark"] .moon-icon { display: none; }
 
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 11px; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.05em; }
+        
         input { 
             width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); 
             background: var(--panel); color: var(--text); font-size: 16px; outline: none;
@@ -74,7 +82,7 @@
 
         .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
 
-        /* calibrated height for exactly 10 steps */
+        /* Calibrated for exactly 10 steps */
         .steps-container { 
             max-height: 480px; 
             overflow-y: auto; font-family: ui-monospace, monospace; 
@@ -88,14 +96,14 @@
             background: var(--btn-bg); border: 1px solid var(--border); 
             width: 100%; padding: 14px; border-radius: 12px;
             color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: all 0.4s ease;
         }
     </style>
 </head>
 <body data-theme="dark">
     <div class="container">
         <div class="header-top-row">
-            <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
-            
+            <img src="xn-math-engine-logo.png" alt="Xn Logo" class="logo-img">
             <div class="side-actions">
                 <div class="icon-btn" id="theme-btn">
                     <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -120,8 +128,8 @@
             <div id="summary" class="summary-text"></div>
             <div id="steps" class="steps-container"></div>
             <div class="action-grid">
-                <button class="action-btn" id="copy-btn" onclick="copyResults()">Copy Results</button>
-                <button class="action-btn" onclick="shareResults()">Share</button>
+                <button class="action-btn" id="copy-btn">Copy Results</button>
+                <button class="action-btn">Share</button>
             </div>
         </div>
     </div>
@@ -132,7 +140,8 @@
               targetInp = document.getElementById('target'), 
               resCard = document.getElementById('result-card'),
               summaryEl = document.getElementById('summary'), 
-              stepsEl = document.getElementById('steps');
+              stepsEl = document.getElementById('steps'),
+              themeBtn = document.getElementById('theme-btn');
 
         const cleanNum = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
@@ -167,10 +176,12 @@
         });
         multInp.addEventListener('input', calculate);
 
-        document.getElementById('theme-btn').onclick = () => {
+        themeBtn.onclick = () => {
             const t = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', t);
         };
+        
+        window.onload = calculate;
     </script>
 </body>
 </html>
