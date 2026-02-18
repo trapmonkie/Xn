@@ -1,6 +1,7 @@
 {
-  "name": "How Many Steps to $1,000,000?",
+  "name": "How Many Steps to $1,000,000? | Multiplier Progress Calculator",
   "short_name": "Steps to $1M",
+  "description": "A deterministic math engine that calculates how many multiplication steps are needed to reach a target.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
@@ -10,6 +11,23 @@
       "src": "xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "categories": ["education", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Double to $1M",
+      "short_name": "Double",
+      "description": "How many doubles to reach $1 million from $1",
+      "url": "/?start=1&m=2&target=1000000",
+      "icons": [{ "src": "xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG", "sizes": "96x96" }]
+    },
+    {
+      "name": "Triple to $1M",
+      "short_name": "Triple",
+      "description": "How many triples to reach $1 million from $25",
+      "url": "/?start=25&m=3&target=1000000",
+      "icons": [{ "src": "xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG", "sizes": "96x96" }]
     }
   ]
 }
