@@ -69,8 +69,8 @@
         
         .anim-line { stroke-dasharray: 400; stroke-dashoffset: 400; }
         
-        /* Dashed Linear: Constant speed */
-        .line-linear { animation: drawLinear 3.5s linear forwards; }
+        /* Dashed Linear: Constant speed, Dash preserved via path spacing */
+        .line-linear { stroke-dasharray: 4, 4; stroke-dashoffset: 400; animation: drawLinear 3.5s linear forwards; }
         
         /* Solid Compounding: Slow start, smooth build-up of momentum */
         .line-compound { animation: drawCompound 4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
@@ -134,7 +134,7 @@
                     <line x1="40" y1="180" x2="360" y2="180" stroke="var(--border)" stroke-width="1"/>
                     <line x1="40" y1="180" x2="40" y2="20" stroke="var(--border)" stroke-width="1"/>
                     
-                    <line x1="40" y1="160" x2="360" y2="80" stroke="var(--sub)" stroke-width="2" stroke-dasharray="4" class="anim-line line-linear"/>
+                    <line x1="40" y1="160" x2="360" y2="80" stroke="var(--sub)" stroke-width="2" class="anim-line line-linear"/>
                     
                     <path d="M 40 160 Q 200 150 360 20" fill="none" stroke="var(--accent)" stroke-width="2.5" class="anim-line line-compound" />
                 </svg>
