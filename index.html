@@ -59,12 +59,12 @@
         .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-top: 16px; overflow: hidden; }
         .graph-svg { width: 100%; height: auto; max-height: 200px; }
         
-        .graph-line { fill: none; stroke-width: 2.5; stroke-dasharray: 600; stroke-dashoffset: 600; transition: stroke 0.3s; }
+        .graph-line { fill: none; stroke-width: 2.5; stroke-dasharray: 600; stroke-dashoffset: 600; }
         .graph-line.animate { animation-fill-mode: forwards; animation-timing-function: ease-in-out; }
         
         @keyframes drawLine { to { stroke-dashoffset: 0; } }
 
-        /* Unique speeds for different growth rates */
+        /* Unique speeds and shapes */
         .line-slow.animate { animation: drawLine 2.8s forwards; }
         .line-med.animate { animation: drawLine 2.0s forwards; }
         .line-fast.animate { animation: drawLine 1.3s forwards; }
@@ -121,11 +121,11 @@
                     <line x1="40" y1="180" x2="360" y2="180" stroke="var(--border)"/>
                     <line x1="40" y1="180" x2="40" y2="20" stroke="var(--border)"/>
                     
-                    <polyline points="40,170 100,150 160,120 220,80 280,40 340,10" class="graph-line line-slow" stroke="var(--accent)" stroke-dasharray="4" id="line1"/>
+                    <path d="M40,170 L340,50" class="graph-line line-slow" stroke="var(--accent)" stroke-dasharray="4" id="line1"/>
                     
-                    <polyline points="40,170 100,140 160,100 220,50 280,20 340,5" class="graph-line line-med" stroke="var(--accent)" id="line2"/>
+                    <path d="M40,170 Q100,150 130,130 T160,110 Q190,90 220,70 T250,50 Q280,30 310,10" class="graph-line line-med" stroke="var(--accent)" id="line2"/>
                     
-                    <polyline points="40,170 100,130 160,70 220,20 280,5 340,2" class="graph-line line-fast" stroke="var(--accent)" stroke-dasharray="2 2" id="line3"/>
+                    <path d="M40,170 C60,170 100,160 140,130 C180,100 220,50 340,10" class="graph-line line-fast" stroke="var(--accent)" stroke-dasharray="2 2" id="line3"/>
                 </svg>
                 <p style="margin-top:12px; font-size:13px; color:var(--sub);">Dashed: 2ⁿ | Solid: 3ⁿ | Dotted: 4ⁿ</p>
             </div>
