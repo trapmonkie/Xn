@@ -39,7 +39,7 @@
     </script>
 
     <style>
-        :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; --btn-bg: #ffffff; --accent: #007BFF; }
+        :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; --btn-bg: #ffffff; --accent: #007BFF; --success: #34c759; }
         [data-theme="dark"] { --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; --btn-bg: #000000; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: background 0.4s, color 0.4s; }
@@ -53,12 +53,14 @@
         [data-theme="dark"] .moon-icon { opacity: 0; transform: rotate(-90deg); }
         .title-block { margin-bottom: 32px; }
         h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+        .subline { color: var(--sub); font-size: 14px; margin-top: 4px; }
         input { width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); color: var(--text); font-size: 16px; margin-bottom: 20px; outline: none; }
         .result-card { background: var(--panel); border-radius: 20px; padding: 24px; margin-top: 24px; border: 1px solid var(--border); display: none; }
         .steps-container { max-height: 280px; overflow-y: auto; font-family: ui-monospace, monospace; font-size: 14px; border-top: 1px solid var(--border); margin-top: 16px; padding-top: 16px; }
         .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
-        .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-weight: 600; cursor: pointer; }
+        .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .action-btn.success { border-color: var(--success); color: var(--success); }
         .answer-block { margin-top: 24px; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; line-height: 1.6; display: none; }
         .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
         .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-family: ui-monospace; font-size: 13px; margin-top: 16px; }
@@ -79,29 +81,31 @@
         </div>
         <div class="title-block">
             <h1>Doubles to $1,000,000</h1>
-            <p class="subline">How many times to double your money?</p>
+            <p class="subline">Visualize the steps of exponential growth by a factor of 2.</p>
         </div>
-        <input type="text" id="start" value="$100.00">
+        
+        <input type="text" id="start" value="$100.00" inputmode="decimal">
         <input type="number" id="multiplier" value="2">
-        <input type="text" id="target" value="$1,000,000.00">
+        <input type="text" id="target" value="$1,000,000.00" inputmode="decimal">
 
         <div id="result-card" class="result-card">
             <div id="summary" class="summary-text" style="font-weight:600; font-size:18px;"></div>
             <div id="steps" class="steps-container"></div>
             <div class="action-grid">
-                <button class="action-btn" onclick="copyResults()">Copy</button>
-                <button class="action-btn" onclick="shareResults()">Share</button>
+                <button class="action-btn" id="copy-btn" onclick="copyResults()">Copy Results</button>
+                <button class="action-btn" id="share-btn" onclick="shareResults()">Share</button>
             </div>
         </div>
 
         <div id="answer-block" class="answer-block"></div>
 
         <section class="content-section">
-            <h2>The Math of Doubling</h2>
-            <p style="font-size:14px; color:var(--sub);">Doubling follows an exponential growth curve defined by the base power of 2.</p>
+            <h2>The Base-2 Formula</h2>
+            <p style="font-size:14px; color:var(--sub);">Doubling is a form of exponential growth where the previous total is scaled by 2 each step.</p>
             <div class="formula-block">
-                Final = Start × 2<sup>n</sup><br>
-                n = log<sub>2</sub>(Goal / Start)
+                Law: Final = Start × Multiplier<sup>n</sup><br>
+                Proof: n = ceil( log(Target ÷ Start) ÷ log(Multiplier) )<br>
+                Executable: Use the calculator above
             </div>
         </section>
 
@@ -115,31 +119,85 @@
     </div>
 
     <script>
-        const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), 
-              targetInp = document.getElementById('target'), resCard = document.getElementById('result-card'),
-              summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps'),
-              answerBlock = document.getElementById('answer-block');
+        const startInp = document.getElementById('start'), 
+              multInp = document.getElementById('multiplier'), 
+              targetInp = document.getElementById('target'), 
+              resCard = document.getElementById('result-card'),
+              summaryEl = document.getElementById('summary'), 
+              stepsEl = document.getElementById('steps'),
+              answerBlock = document.getElementById('answer-block'),
+              copyBtn = document.getElementById('copy-btn');
 
         const clean = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
+        // Fix 1: Maintain $ formatting even when clearing/editing
+        function handleFormat(e) {
+            let val = clean(e.target.value);
+            e.target.value = fmt(val);
+            calculate();
+        }
+
         function calculate() {
             let cur = clean(startInp.value), m = parseFloat(multInp.value), goal = clean(targetInp.value);
-            if (cur <= 0 || m <= 1) return;
-            resCard.style.display = 'block'; answerBlock.style.display = 'block';
+            if (cur <= 0 || m <= 1) {
+                resCard.style.display = 'none';
+                answerBlock.style.display = 'none';
+                return;
+            }
+            resCard.style.display = 'block'; 
+            answerBlock.style.display = 'block';
+            
             let count = 0, out = "", startVal = cur;
             while (cur < goal && count < 200) {
-                let next = cur * m; count++;
-                out += `<div class="step-row">Step ${count}: ${fmt(cur)} → ${fmt(next)}</div>`;
-                cur = next;
+                let prev = cur;
+                cur = cur * m; 
+                count++;
+                out += `<div class="step-row">Step ${count}: ${fmt(prev)} × ${m} = ${fmt(cur)}</div>`;
             }
-            summaryEl.innerText = `${count} doubles to exceed ${fmt(goal)}`;
+            summaryEl.innerText = `${count} steps to reach ${fmt(goal)}`;
             stepsEl.innerHTML = out;
-            answerBlock.innerHTML = `<strong>Quick Answer:</strong> To reach ${fmt(goal)} from ${fmt(startVal)} by doubling (2x), it takes exactly <strong>${count} steps</strong>.`;
+            answerBlock.innerHTML = `<strong>Quick Answer:</strong> Multiplying ${fmt(startVal)} by ${m} repeatedly takes <strong>${count} steps</strong> to hit the million dollar mark.`;
         }
-        
-        startInp.oninput = targetInp.oninput = multInp.oninput = calculate;
-        document.getElementById('theme-btn').onclick = () => document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+
+        // Fix 2: Functional Copy Button
+        function copyResults() {
+            const text = `${summaryEl.innerText}\n\n${Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n')}`;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = "Copied!";
+                copyBtn.classList.add('success');
+                setTimeout(() => {
+                    copyBtn.innerText = originalText;
+                    copyBtn.classList.remove('success');
+                }, 1500);
+            });
+        }
+
+        // Fix 3: Functional Share Button
+        async function shareResults() {
+            const shareData = {
+                title: 'Doubling to $1,000,000 Path',
+                text: summaryEl.innerText,
+                url: window.location.href
+            };
+            try {
+                if (navigator.share) await navigator.share(shareData);
+                else copyResults();
+            } catch (err) { console.log('Share failed', err); }
+        }
+
+        // Event Listeners
+        startInp.addEventListener('blur', handleFormat);
+        targetInp.addEventListener('blur', handleFormat);
+        startInp.addEventListener('input', calculate);
+        targetInp.addEventListener('input', calculate);
+        multInp.addEventListener('input', calculate);
+
+        document.getElementById('theme-btn').onclick = () => {
+            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        };
+
         window.onload = calculate;
     </script>
 </body>
