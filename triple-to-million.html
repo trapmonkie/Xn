@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link rel="canonical" href="https://multiplytomillion.vercel.app/triple-to-million">
+    <link rel="canonical" href="https://multiplytomillion.vercel.app/double-to-million">
     <link rel="icon" href="/xn-compound-growth-multiplier-favicon.PNG" type="image/png" sizes="100x100">
-    <title>Triple to $1,000,000 Calculator – How Many Triples?</title>
-    <meta name="description" content="Calculate exactly how many times you need to triple your money to reach $1,000,000. Start from $25 and see the growth.">
+    <link rel="shortcut icon" href="/xn-compound-growth-multiplier-favicon.PNG">
+    <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG">
+    <title>Double to $1,000,000 Calculator – How Many Doubles?</title>
+    <meta name="description" content="Calculate exactly how many times you need to double your money to reach $1,000,000. Start from $100 and see the step-by-step growth path.">
     
     <script type="application/ld+json">
     {
@@ -14,37 +16,56 @@
         "@graph": [
             {
                 "@type": "SoftwareApplication",
-                "name": "Tripling to Million Calculator",
-                "url": "https://multiplytomillion.vercel.app/triple-to-million"
+                "name": "Doubling to Million Calculator",
+                "operatingSystem": "Any",
+                "applicationCategory": "FinancialApplication",
+                "url": "https://multiplytomillion.vercel.app/double-to-million",
+                "potentialAction": {
+                    "@type": "CalculateAction",
+                    "name": "Calculate Doubling Path"
+                }
             },
             {
-                "@type": "FAQPage",
-                "mainEntity": [{
-                    "@type": "Question",
-                    "name": "How many triples to reach a million from $25?",
-                    "acceptedAnswer": { "@type": "Answer", "text": "It takes 10 tripling steps to reach $1,476,225 starting from $25." }
-                }]
+                "@type": "HowTo",
+                "name": "How to calculate doubling steps to a million",
+                "step": [
+                    { "@type": "HowToStep", "text": "Enter your starting amount, e.g., $100." },
+                    { "@type": "HowToStep", "text": "Set the multiplier to 2 for doubling." },
+                    { "@type": "HowToStep", "text": "Review the generated list of steps to reach $1,000,000." }
+                ]
             }
         ]
     }
     </script>
 
     <style>
-        /* Shared Styles as above */
         :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; --btn-bg: #ffffff; --accent: #007BFF; }
         [data-theme="dark"] { --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; --btn-bg: #000000; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: background 0.4s, color 0.4s; }
         .container { max-width: 480px; margin: 0 auto; }
         .header-top-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-top: 4px solid var(--accent); padding-top: 15px; margin-bottom: 20px; }
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
+        .side-actions { display: flex; gap: 12px; }
+        .icon-btn { background: var(--panel); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+        .icon-btn svg { position: absolute; width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; transition: transform 0.4s, opacity 0.4s; }
+        [data-theme="light"] .sun-icon { opacity: 0; transform: rotate(90deg); }
+        [data-theme="dark"] .moon-icon { opacity: 0; transform: rotate(-90deg); }
         .title-block { margin-bottom: 32px; }
+        h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+        .subline { color: var(--sub); font-size: 14px; margin-top: 4px; }
         input { width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); color: var(--text); font-size: 16px; margin-bottom: 20px; outline: none; }
-        .result-card { background: var(--panel); border-radius: 20px; padding: 24px; border: 1px solid var(--border); display: none; }
-        .steps-container { max-height: 280px; overflow-y: auto; font-family: ui-monospace; font-size: 14px; border-top: 1px solid var(--border); margin-top: 16px; padding-top: 16px; }
+        .result-card { background: var(--panel); border-radius: 20px; padding: 24px; margin-top: 24px; border: 1px solid var(--border); display: none; }
+        .steps-container { max-height: 280px; overflow-y: auto; font-family: ui-monospace, monospace; font-size: 14px; border-top: 1px solid var(--border); margin-top: 16px; padding-top: 16px; }
         .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
-        .answer-block { margin-top: 24px; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; display: none; }
-        .content-section { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 24px; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+        .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        
+        /* Updated solid blue and white "Copied" state */
+        .action-btn.success { background-color: var(--accent) !important; color: #ffffff !important; border-color: var(--accent) !important; }
+        
+        .answer-block { margin-top: 24px; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; line-height: 1.6; display: none; }
+        .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
         .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-family: ui-monospace; font-size: 13px; margin-top: 16px; }
         .related-section { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; color: var(--text); text-decoration: none; }
@@ -54,26 +75,40 @@
     <div class="container">
         <div class="header-top-row">
             <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
+            <div class="side-actions">
+                <div class="icon-btn" id="theme-btn">
+                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                </div>
+            </div>
         </div>
         <div class="title-block">
-            <h1>Triples to $1,000,000</h1>
-            <p class="subline">Exponential growth by a factor of 3.</p>
+            <h1>Doubles to $1,000,000</h1>
+            <p class="subline">Visualize the steps of exponential growth by a factor of 2.</p>
         </div>
-        <input type="text" id="start" value="$25.00">
-        <input type="number" id="multiplier" value="3">
-        <input type="text" id="target" value="$1,000,000.00">
+        
+        <input type="text" id="start" value="$100.00" inputmode="decimal">
+        <input type="number" id="multiplier" value="2">
+        <input type="text" id="target" value="$1,000,000.00" inputmode="decimal">
 
         <div id="result-card" class="result-card">
-            <div id="summary" style="font-weight:600; font-size:18px;"></div>
+            <div id="summary" class="summary-text" style="font-weight:600; font-size:18px;"></div>
             <div id="steps" class="steps-container"></div>
+            <div class="action-grid">
+                <button class="action-btn" id="copy-btn" onclick="copyResults()">Copy Results</button>
+                <button class="action-btn" id="share-btn" onclick="shareResults()">Share</button>
+            </div>
         </div>
 
         <div id="answer-block" class="answer-block"></div>
 
         <section class="content-section">
-            <h2>The Base-3 Formula</h2>
+            <h2>The Base-2 Formula</h2>
+            <p style="font-size:14px; color:var(--sub);">Doubling is a form of exponential growth where the previous total is scaled by 2 each step.</p>
             <div class="formula-block">
-                Value = Start × 3<sup>steps</sup>
+                Law: Final = Start × Multiplier<sup>n</sup><br>
+                Proof: n = ceil( log(Target ÷ Start) ÷ log(Multiplier) )<br>
+                Executable: Use the calculator above
             </div>
         </section>
 
@@ -82,32 +117,91 @@
             <a href="/double-to-million" class="related-link">Double</a>
             <a href="/triple-to-million" class="related-link">Triple</a>
             <a href="/quadruple-to-million" class="related-link">Quadruple</a>
+            <a href="/compounding-process" class="related-link">Compounding</a>
         </div>
     </div>
+
     <script>
-        const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), 
-              targetInp = document.getElementById('target'), resCard = document.getElementById('result-card'),
-              summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps'),
-              answerBlock = document.getElementById('answer-block');
+        const startInp = document.getElementById('start'), 
+              multInp = document.getElementById('multiplier'), 
+              targetInp = document.getElementById('target'), 
+              resCard = document.getElementById('result-card'),
+              summaryEl = document.getElementById('summary'), 
+              stepsEl = document.getElementById('steps'),
+              answerBlock = document.getElementById('answer-block'),
+              copyBtn = document.getElementById('copy-btn');
 
         const clean = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
+        // Fix 1: Force $ sign on blur to ensure persistent currency formatting
+        function handleFormat(e) {
+            let val = clean(e.target.value);
+            e.target.value = fmt(val);
+            calculate();
+        }
+
         function calculate() {
             let cur = clean(startInp.value), m = parseFloat(multInp.value), goal = clean(targetInp.value);
-            if (cur <= 0 || m <= 1) return;
-            resCard.style.display = 'block'; answerBlock.style.display = 'block';
+            if (cur <= 0 || m <= 1) {
+                resCard.style.display = 'none';
+                answerBlock.style.display = 'none';
+                return;
+            }
+            resCard.style.display = 'block'; 
+            answerBlock.style.display = 'block';
+            
             let count = 0, out = "", startVal = cur;
             while (cur < goal && count < 200) {
-                let next = cur * m; count++;
-                out += `<div class="step-row">Step ${count}: ${fmt(cur)} × 3 = ${fmt(next)}</div>`;
-                cur = next;
+                let prev = cur;
+                cur = cur * m; 
+                count++;
+                out += `<div class="step-row">Step ${count}: ${fmt(prev)} × ${m} = ${fmt(cur)}</div>`;
             }
-            summaryEl.innerText = `${count} triples to exceed ${fmt(goal)}`;
+            summaryEl.innerText = `${count} steps to reach ${fmt(goal)}`;
             stepsEl.innerHTML = out;
-            answerBlock.innerHTML = `<strong>Quick Answer:</strong> Multiplying ${fmt(startVal)} by 3 repeatedly takes <strong>${count} steps</strong> to hit the million dollar mark.`;
+            answerBlock.innerHTML = `<strong>Quick Answer:</strong> Multiplying ${fmt(startVal)} by ${m} repeatedly takes <strong>${count} steps</strong> to hit the million dollar mark.`;
         }
-        startInp.oninput = targetInp.oninput = multInp.oninput = calculate;
+
+        // Fix 2: Functional Copy Button with solid blue feedback
+        function copyResults() {
+            const text = `${summaryEl.innerText}\n\n${Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n')}`;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = "Copied!";
+                copyBtn.classList.add('success');
+                setTimeout(() => {
+                    copyBtn.innerText = originalText;
+                    copyBtn.classList.remove('success');
+                }, 1500);
+            });
+        }
+
+        // Fix 3: Functional Share Button (Web Share API)
+        async function shareResults() {
+            const shareData = {
+                title: 'Doubling to $1,000,000 Path',
+                text: summaryEl.innerText,
+                url: window.location.href
+            };
+            try {
+                if (navigator.share) await navigator.share(shareData);
+                else copyResults();
+            } catch (err) { console.log('Share failed', err); }
+        }
+
+        // Persistent listeners for $ sign and live calculation
+        startInp.addEventListener('blur', handleFormat);
+        targetInp.addEventListener('blur', handleFormat);
+        startInp.addEventListener('input', calculate);
+        targetInp.addEventListener('input', calculate);
+        multInp.addEventListener('input', calculate);
+
+        // Theme Toggle Logic
+        document.getElementById('theme-btn').onclick = () => {
+            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        };
+
         window.onload = calculate;
     </script>
 </body>
