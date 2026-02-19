@@ -67,16 +67,17 @@
         .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 24px 0; text-align: center; overflow: hidden; }
         .graph-svg { width: 100%; height: auto; }
         
+        /* Animation Logic */
         .anim-line { stroke-dasharray: 400; stroke-dashoffset: 400; }
         
-        /* Dashed Linear: Constant speed, Dash preserved via path spacing */
-        .line-linear { stroke-dasharray: 4, 4; stroke-dashoffset: 400; animation: drawLinear 3.5s linear forwards; }
+        /* Dashed Linear: Maintain dashes while growing */
+        .line-linear { stroke-dasharray: 6, 6; animation: drawLinear 3.5s linear forwards; }
         
-        /* Solid Compounding: Slow start, smooth build-up of momentum */
-        .line-compound { animation: drawCompound 4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        /* Solid Compounding: Slow start, smooth build-up */
+        .line-compound { stroke-dasharray: 400; animation: drawCompound 4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-        @keyframes drawLinear { to { stroke-dashoffset: 0; } }
-        @keyframes drawCompound { to { stroke-dashoffset: 0; } }
+        @keyframes drawLinear { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
+        @keyframes drawCompound { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
 
         .related-section { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: 0.3s; }
