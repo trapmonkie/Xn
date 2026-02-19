@@ -39,7 +39,7 @@
     </script>
 
     <style>
-        :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; --btn-bg: #ffffff; --accent: #007BFF; --success: #34c759; }
+        :root { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; --btn-bg: #ffffff; --accent: #007BFF; }
         [data-theme="dark"] { --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; --btn-bg: #000000; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: background 0.4s, color 0.4s; }
@@ -60,7 +60,10 @@
         .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
         .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .action-btn.success { border-color: var(--success); color: var(--success); }
+        
+        /* Updated solid blue and white "Copied" state */
+        .action-btn.success { background-color: var(--accent) !important; color: #ffffff !important; border-color: var(--accent) !important; }
+        
         .answer-block { margin-top: 24px; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; line-height: 1.6; display: none; }
         .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
         .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-family: ui-monospace; font-size: 13px; margin-top: 16px; }
@@ -131,7 +134,7 @@
         const clean = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 
-        // Fix 1: Maintain $ formatting even when clearing/editing
+        // Fix 1: Force $ sign on blur to ensure persistent currency formatting
         function handleFormat(e) {
             let val = clean(e.target.value);
             e.target.value = fmt(val);
@@ -160,7 +163,7 @@
             answerBlock.innerHTML = `<strong>Quick Answer:</strong> Multiplying ${fmt(startVal)} by ${m} repeatedly takes <strong>${count} steps</strong> to hit the million dollar mark.`;
         }
 
-        // Fix 2: Functional Copy Button
+        // Fix 2: Functional Copy Button with solid blue feedback
         function copyResults() {
             const text = `${summaryEl.innerText}\n\n${Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n')}`;
             navigator.clipboard.writeText(text).then(() => {
@@ -174,7 +177,7 @@
             });
         }
 
-        // Fix 3: Functional Share Button
+        // Fix 3: Functional Share Button (Web Share API)
         async function shareResults() {
             const shareData = {
                 title: 'Doubling to $1,000,000 Path',
@@ -187,13 +190,14 @@
             } catch (err) { console.log('Share failed', err); }
         }
 
-        // Event Listeners
+        // Persistent listeners for $ sign and live calculation
         startInp.addEventListener('blur', handleFormat);
         targetInp.addEventListener('blur', handleFormat);
         startInp.addEventListener('input', calculate);
         targetInp.addEventListener('input', calculate);
         multInp.addEventListener('input', calculate);
 
+        // Theme Toggle Logic
         document.getElementById('theme-btn').onclick = () => {
             document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         };
