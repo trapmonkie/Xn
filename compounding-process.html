@@ -43,6 +43,8 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: 0.4s ease; }
         .container { max-width: 480px; margin: 0 auto; }
         .header-top-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-top: 4px solid var(--accent); padding-top: 15px; margin-bottom: 20px; }
+        .logo-link { display: flex; align-items: center; text-decoration: none; transition: opacity 0.2s ease; }
+        .logo-link:hover { opacity: 0.8; }
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
         .side-actions { display: flex; gap: 12px; }
         .icon-btn { background: var(--panel); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; }
@@ -55,7 +57,10 @@
         .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
         .content-section h2 { font-size: 18px; margin-bottom: 12px; font-weight: 600; }
         .content-section p { font-size: 14px; color: var(--sub); line-height: 1.7; margin-bottom: 16px; }
-        .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px; font-family: ui-monospace, monospace; font-size: 13px; color: var(--text); line-height: 1.6; margin: 16px 0; }
+        .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px; font-family: ui-monospace, monospace; font-size: 15px; color: var(--text); line-height: 1.6; margin: 16px 0; }
+        .formula-details { list-style: none; font-size: 14px; color: var(--sub); }
+        .formula-details li { margin-bottom: 12px; line-height: 1.5; }
+        .formula-details strong { color: var(--text); }
         .answer-block { margin-top: 24px; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; line-height: 1.6; }
         .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 24px 0; text-align: center; }
         .graph-svg { width: 100%; height: auto; }
@@ -67,7 +72,9 @@
 <body data-theme="dark">
     <div class="container">
         <div class="header-top-row">
-            <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
+            <a href="/" class="logo-link" aria-label="Go to Home">
+                <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
+            </a>
             <div class="side-actions">
                 <div class="icon-btn" id="theme-btn">
                     <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -82,23 +89,37 @@
         </div>
 
         <div class="answer-block">
-            <strong>Snippet Summary:</strong> The compounding process works by applying a <strong>multiplier (1 + r)</strong> to a total that grows every period. Unlike linear growth, compounding builds on previous gains, leading to an exponential curve.
+            The <strong>compounding process</strong> is the financial "snowball effect" where your money generates earnings, and those earnings are reinvested to generate their own earnings. This creates a cycle where the growth base expands every period, leading to an <strong>exponential curve</strong> rather than a straight line.
         </div>
 
         <section class="content-section">
             <h2>The Multiplier Logic</h2>
-            <p>Compounding occurs when you earn a return on both your initial principal and the accumulated interest. Mathematically, this is expressed as:</p>
-            <div class="formula-block">
-                $$A = P(1 + r)^n$$<br>
-                <strong>P</strong> = Principal | <strong>r</strong> = Rate | <strong>n</strong> = Periods
-            </div>
+            <p>Unlike linear growth (which adds a fixed amount every period), compounding uses <strong>repeated multiplication</strong>. Each period, the total is multiplied by a growth factor.</p>
         </section>
 
-        
+        <section class="content-section">
+            <h2>The Mathematical Formula</h2>
+            <p>For discrete compounding periods, the future value (𝐴) is calculated as:</p>
+            <div class="formula-block">
+                𝐴 = 𝑃(1 + 𝑟)ⁿ
+            </div>
+            <ul class="formula-details">
+                <li><strong>𝑃 (Principal):</strong> The initial sum of money invested.</li>
+                <li><strong>𝑟 (Rate):</strong> The interest rate per period, expressed as a decimal (e.g., 5% = 0.05).</li>
+                <li><strong>𝑛 (Periods):</strong> The total number of compounding intervals.</li>
+            </ul>
+        </section>
 
         <section class="content-section">
             <h2>Linear vs Exponential</h2>
-            <p>Linear growth adds a fixed amount. Compounding scales the whole total. Over time, the "gap" between them represents the wealth created by time itself.</p>
+            <p><strong>Linear Growth:</strong> You earn interest only on the original principal.<br>
+            <strong>Compound Growth:</strong> You earn "interest on interest".</p>
+            
+            
+
+[Image of compound interest vs simple interest graph]
+
+
             <div class="graph-container">
                 <svg class="graph-svg" viewBox="0 0 400 200">
                     <line x1="40" y1="180" x2="360" y2="180" stroke="var(--border)" stroke-width="1"/>
