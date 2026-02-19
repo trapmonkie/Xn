@@ -77,13 +77,23 @@
         .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .action-btn.success { background-color: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
         
-        /* Content & Graph Styling */
+        /* Content, Graph & FAQ Styling */
         .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
         .content-section h2 { font-size: 18px; margin-bottom: 16px; font-weight: 600; }
         .content-section p { font-size: 14px; color: var(--sub); line-height: 1.7; margin-bottom: 12px; }
         .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-top: 16px; }
         .graph-svg { width: 100%; height: auto; max-height: 200px; }
         .graph-line { fill: none; stroke-width: 2.5; transition: 0.3s; }
+
+        .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; font-family: ui-monospace, monospace; font-size: 13px; color: var(--sub); line-height: 1.8; margin: 20px 0; }
+        .formula-block b { color: var(--text); }
+
+        .faq-item { border-bottom: 1px solid var(--border); padding: 12px 0; }
+        .faq-item summary { list-style: none; cursor: pointer; font-size: 14px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; color: var(--accent); font-size: 18px; }
+        .faq-item[open] summary::after { content: '−'; }
+        .faq-item p { margin-top: 10px; font-size: 13px; color: var(--sub); }
 
         .related-section { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: 0.3s; }
@@ -138,8 +148,47 @@
                 </svg>
                 <p style="margin-top:12px; font-size:13px; color:var(--sub);">Dashed: 2ⁿ | Solid: 3ⁿ | Dotted: 4ⁿ</p>
             </div>
+
+            <div class="formula-block">
+                <b>Law:</b> Final = Start × Multiplier^n<br>
+                <b>Proof:</b> n = ceil( log(Target ÷ Start) ÷ log(Multiplier) )<br>
+                <b>Example:</b> $25 × 3^10 = $1,476,225 → 10 steps to exceed $1,000,000<br>
+                <b>Executable:</b> Use the calculator above
+            </div>
             <p style="margin-top: 20px;">Geometric progression allows values to scale rapidly by multiplying the previous total. This math engine helps visualize how many steps are required to reach major milestones based on your specific growth rate.</p>
-        </section>
+
+            <h2 style="margin-top: 30px;">Frequently Asked Questions</h2>
+            
+            <details class="faq-item">
+                <summary>How many times do you need to double $1 to reach $1 million?</summary>
+                <p>Starting from $1 and doubling each step (×2), it takes 20 steps to exceed $1,000,000. The value at step 20 is $1,048,576.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>How many triples does it take to reach $1 million from $25?</summary>
+                <p>Starting from $25 and tripling each step (×3), it takes 10 steps to exceed $1,000,000. Final: $25 × 3^10 = $1,476,225.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Difference between compounding and exponential growth?</summary>
+                <p>Compounding usually refers to interest added to a principal over time, while exponential growth is the broader mathematical pattern where the rate of change is proportional to the current amount.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>The break down per multiplier.</summary>
+                <p>Higher multipliers shorten the path significantly. A 3x multiplier is roughly 1.58x faster than a 2x multiplier due to the logarithmic nature of growth.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>What is the "Triple" Formula?</summary>
+                <p>The triple formula is Start × 3ⁿ. Each step multiplies the total by three, reaching the target in log₃(Target/Start) steps.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>The Rule of Thumb</summary>
+                <p>Small increases in the multiplier lead to massive differences in the final outcome. Consistency in the multiplication phase is more important than the starting amount.</p>
+            </details>
+            </section>
 
         <div class="related-section">
             <a href="/double-to-million" class="related-link">Doubling</a>
