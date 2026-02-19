@@ -23,61 +23,86 @@
     <link rel="apple-touch-icon" href="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG">
 
     <title>Multiply to $1,000,000 | Multiplier Progress Calculator</title>
-    <meta name="description" content="Calculate exactly how many steps it takes to reach $1,000,000 using any multiplier.">
+    <meta name="title" content="Multiply to $1,000,000 | Multiplier Progress Calculator">
+    <meta name="description" content="Calculate exactly how many steps it takes to reach $1,000,000 using any multiplier. See the step-by-step growth path from any starting amount.">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://multiplytomillion.vercel.app/">
+    <meta property="og:title" content="Multiply to $1,000,000 | Multiplier Progress Calculator">
+    <meta property="og:description" content="Calculate the exact number of growth multiplications to reach $1,000,000.">
+    <meta property="og:image" content="xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG"> 
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007BFF">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Multiply to $1,000,000 Calculator",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "description": "A math engine that calculates the multiplication steps needed to reach one million dollars.",
+        "url": "https://multiplytomillion.vercel.app/",
+        "screenshot": "xn-multiplytomillion-compound-wealth-calculator-app-icon-day.png.PNG"
+    }
+    </script>
+
     <style>
         :root { --bg: #000000; --text: #ffffff; --sub: #9a9aa1; --border: #1c1c1e; --panel: #111111; --btn-bg: #1c1c1e; --accent: #007BFF; }
         [data-theme="light"] { --bg: #ffffff; --text: #000000; --sub: #6e6e73; --border: #e5e5e7; --panel: #f6f6f7; --btn-bg: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: background-color 0.4s ease, color 0.4s ease; }
         .container { max-width: 480px; margin: 0 auto; }
-        
         .header-top-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-top: 4px solid var(--accent); padding-top: 15px; margin-bottom: 20px; }
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
-        
-        .icon-btn { background: var(--panel); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; }
-        .icon-btn svg { width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; }
-        
+        .side-actions { display: flex; gap: 12px; }
+        .icon-btn { background: var(--panel); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.4s ease; }
+        .icon-btn svg { position: absolute; width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; transition: 0.4s ease; }
+        [data-theme="light"] .sun-icon { opacity: 0; transform: rotate(90deg); }
+        [data-theme="dark"] .moon-icon { opacity: 0; transform: rotate(-90deg); }
         .title-block { margin-bottom: 32px; }
         h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
         .subline { color: var(--sub); font-size: 15px; margin-top: 4px; }
-
-        input { width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); color: var(--text); font-size: 16px; outline: none; margin-bottom: 20px; }
-        
+        input { width: 100%; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); color: var(--text); font-size: 16px; outline: none; margin-bottom: 20px; transition: 0.3s; }
+        input:focus { border-color: var(--accent); }
         .result-card { background: var(--panel); border-radius: 20px; padding: 24px; margin-top: 24px; border: 1px solid var(--border); display: none; }
+        .summary-text { font-weight: 600; font-size: 19px; margin-bottom: 16px; }
         .steps-container { max-height: 280px; overflow-y: auto; font-family: ui-monospace, monospace; font-size: 14px; border-top: 1px solid var(--border); padding-top: 16px; }
         .step-row { padding: 8px 0; color: var(--sub); border-bottom: 1px solid var(--border); }
-        
-        .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+        .action-btn { background: var(--btn-bg); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .action-btn.success { background-color: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
-
-        /* Graph & Animation */
+        
+        /* Graph Styling & Animations */
         .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .content-section h2 { font-size: 18px; margin-bottom: 16px; font-weight: 600; }
+        .content-section p { font-size: 14px; color: var(--sub); line-height: 1.7; margin-bottom: 12px; }
         .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-top: 16px; overflow: hidden; }
         .graph-svg { width: 100%; height: auto; max-height: 200px; }
-        
-        /* Path Animation Logic */
-        .graph-line { fill: none; stroke-width: 2.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; }
-        .graph-line.animate { animation: drawLine 2.5s ease-out forwards; }
-        @keyframes drawLine { to { stroke-dashoffset: 0; } }
+        .graph-line { fill: none; stroke-width: 2.5; transition: 0.3s; }
+
+        @keyframes riseUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-rise { animation: riseUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: bottom; }
 
         .formula-block { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; font-family: ui-monospace, monospace; font-size: 13px; color: var(--sub); line-height: 1.8; margin: 20px 0; }
+        .formula-block b { color: var(--text); }
 
-        /* Rule of Thumb Styling */
-        .rule-thumb-title { color: var(--accent); font-weight: 600; margin-top: 30px; font-size: 18px; }
+        .faq-title { color: var(--accent); font-weight: 600; margin-top: 30px; margin-bottom: 10px; font-size: 16px; }
         .faq-item { border-bottom: 1px solid var(--border); padding: 12px 0; }
         .faq-item summary { list-style: none; cursor: pointer; font-size: 14px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
         .faq-item summary::after { content: '+'; color: var(--accent); font-size: 18px; }
         .faq-item[open] summary::after { content: '−'; }
         .faq-item p { margin-top: 10px; font-size: 13px; color: var(--sub); }
 
-        /* Related Links Pills */
-        .related-section { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
-        .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: 0.2s; }
-        .related-link:active, .related-link:focus { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+        .related-section { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: 0.3s; }
+        .related-link:hover { border-color: var(--accent); }
+        .answer-block { margin-top: 16px; font-size: 14px; color: var(--sub); line-height: 1.6; display: none; }
     </style>
 </head>
 <body data-theme="dark">
@@ -85,8 +110,12 @@
         <div class="header-top-row">
             <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
             <div class="side-actions">
-                <div class="icon-btn" id="theme-btn">
-                    <svg viewBox="0 0 24 24" id="theme-icon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <div class="icon-btn" id="theme-btn" aria-label="Toggle Theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                </div>
+                <div class="icon-btn" onclick="alert('Tap Share > Add to Home Screen.')" aria-label="Home Screen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 </div>
             </div>
         </div>
@@ -101,23 +130,25 @@
         <input type="text" id="target" inputmode="decimal" placeholder="Target Amount ($1,000,000.00)">
 
         <div id="result-card" class="result-card">
-            <div id="summary" style="font-weight:600; font-size:19px; margin-bottom:16px;"></div>
+            <div id="summary" class="summary-text"></div>
             <div id="steps" class="steps-container"></div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px;">
+            <div class="action-grid">
                 <button class="action-btn" id="copy-btn" onclick="copyResults()">Copy Results</button>
-                <button class="action-btn" onclick="shareResults()">Share</button>
+                <button class="action-btn" id="share-btn" onclick="shareResults()">Share</button>
             </div>
         </div>
 
+        <div id="answer-block" class="answer-block"></div>
+
         <section class="content-section">
             <h2>Exponential Growth: 2ⁿ vs 3ⁿ vs 4ⁿ</h2>
-            <div class="graph-container" id="graph-section">
-                <svg class="graph-svg" viewBox="0 0 400 200">
+            <div class="graph-container">
+                <svg class="graph-svg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
                     <line x1="40" y1="180" x2="360" y2="180" stroke="var(--border)"/>
                     <line x1="40" y1="180" x2="40" y2="20" stroke="var(--border)"/>
-                    <path d="M40,170 Q100,160 340,100" class="graph-line" stroke="var(--accent)" stroke-dasharray="4" id="line1"/>
-                    <path d="M40,170 Q100,130 340,40" class="graph-line" stroke="var(--accent)" id="line2"/>
-                    <path d="M40,170 Q100,80 340,5" class="graph-line" stroke="var(--accent)" stroke-dasharray="2 2" id="line3"/>
+                    <polyline points="40,170 100,150 160,120 220,80 280,40 340,10" class="graph-line animate-rise" stroke="var(--accent)" stroke-dasharray="4" style="animation-delay: 0.2s;"/>
+                    <polyline points="40,170 100,140 160,100 220,50 280,20 340,5" class="graph-line animate-rise" stroke="var(--accent)" style="animation-delay: 0.4s;"/>
+                    <polyline points="40,170 100,130 160,70 220,20 280,5 340,2" class="graph-line animate-rise" stroke="var(--accent)" stroke-dasharray="2 2" style="animation-delay: 0.6s;"/>
                 </svg>
                 <p style="margin-top:12px; font-size:13px; color:var(--sub);">Dashed: 2ⁿ | Solid: 3ⁿ | Dotted: 4ⁿ</p>
             </div>
@@ -133,26 +164,32 @@
                 The expression <b>Xⁿ</b> is the correct algebraic way to represent this, where <b>x</b> is the multiplier (double, triple, etc.) and <b>n</b> is the number of times that multiplier is applied.
             </div>
 
-            <div class="rule-thumb-title">Rule of Thumb</div>
+            <div class="faq-title">FAQ</div>
+            <h2 style="margin-top: 0;">Rule of thumb</h2>
             
             <details class="faq-item">
                 <summary>To Double, the base is 2 (2ⁿ)</summary>
-                <p>Starting from $1 and doubling each step (×2), it takes 20 steps to reach $1,048,576.</p>
+                <p>Starting from $1 and doubling each step (×2), it takes 20 steps to exceed $1,000,000. The value at step 20 is $1,048,576.</p>
             </details>
 
             <details class="faq-item">
                 <summary>To Triple, the base is 3 (3ⁿ)</summary>
-                <p>Starting from $25 and tripling each step (×3), it takes 10 steps to reach $1,476,225.</p>
+                <p>Starting from $25 and tripling each step (×3), it takes 10 steps to exceed $1,000,000. Final: $25 × 3^10 = $1,476,225.</p>
             </details>
 
             <details class="faq-item">
                 <summary>To Quadruple, the base is 4 (4ⁿ)</summary>
-                <p>A 4x multiplier accelerates growth much faster, represented by the base-4 exponential function.</p>
+                <p>Higher multipliers shorten the path significantly. A 4x multiplier accelerates growth much faster than 2x or 3x, represented by the base-4 exponential function.</p>
             </details>
 
             <details class="faq-item">
                 <summary>Xⁿ = X is the base</summary>
-                <p>In algebra, the base (X) is the number being multiplied, and the exponent (n) is the count of steps.</p>
+                <p>In algebra, the base (X) is the number being multiplied, and the exponent (n) represents how many times the multiplication occurs.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Difference between compounding and exponential growth?</summary>
+                <p>Compounding usually refers to interest added to a principal over time, while exponential growth is the broader mathematical pattern where the rate of change is proportional to the current amount.</p>
             </details>
         </section>
     </div>
@@ -161,37 +198,39 @@
         const startInp = document.getElementById('start'), multInp = document.getElementById('multiplier'), 
               targetInp = document.getElementById('target'), resCard = document.getElementById('result-card'),
               summaryEl = document.getElementById('summary'), stepsEl = document.getElementById('steps'),
-              copyBtn = document.getElementById('copy-btn');
+              themeBtn = document.getElementById('theme-btn'), copyBtn = document.getElementById('copy-btn'),
+              answerBlock = document.getElementById('answer-block');
 
-        const cleanNum = (s) => parseFloat(s.toString().replace(/[^0-9.-]+/g, "")) || 0;
+        const cleanNum = (s) => { const num = parseFloat(s.toString().replace(/[^0-9.-]+/g, "")); return isFinite(num) ? num : 0; };
         const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
+
+        function formatInput(e) {
+            const val = cleanNum(e.target.value);
+            if (val > 0) e.target.value = fmt(val);
+        }
 
         function calculate() {
             let cur = cleanNum(startInp.value), m = parseFloat(multInp.value) || 0, goal = cleanNum(targetInp.value);
-            if (cur <= 0 || m <= 1 || goal <= cur) { resCard.style.display = 'none'; return; }
+            if (cur <= 0 || m <= 1 || goal <= cur) { resCard.style.display = 'none'; answerBlock.style.display = 'none'; return; }
+            
             resCard.style.display = 'block';
             let count = 0, out = "";
-            while (cur < goal && count < 200) {
+            while (cur < goal && count < 300) {
                 let next = cur * m; count++;
                 out += `<div class="step-row"><b>Step ${count}:</b> ${fmt(cur)} × ${m} = ${fmt(next)}</div>`;
                 cur = next;
             }
             summaryEl.innerText = `${count} steps to reach ${fmt(goal)}`;
             stepsEl.innerHTML = out;
+            answerBlock.style.display = 'block';
+            answerBlock.textContent = `With a ${m}x multiplier, it takes ${count} steps to exceed ${fmt(goal)}.`;
         }
 
-        [startInp, targetInp, multInp].forEach(el => el.addEventListener('input', calculate));
-        [startInp, targetInp].forEach(el => el.addEventListener('blur', (e) => { e.target.value = fmt(cleanNum(e.target.value)); }));
-
-        // Intersection Observer for Graph Animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    document.querySelectorAll('.graph-line').forEach(line => line.classList.add('animate'));
-                }
-            });
-        }, { threshold: 0.5 });
-        observer.observe(document.getElementById('graph-section'));
+        [startInp, targetInp].forEach(el => {
+            el.addEventListener('blur', formatInput);
+            el.addEventListener('input', calculate);
+        });
+        multInp.addEventListener('input', calculate);
 
         function copyResults() {
             const text = `${summaryEl.innerText}\n\n` + Array.from(stepsEl.querySelectorAll('.step-row')).map(r => r.innerText).join('\n');
@@ -203,10 +242,11 @@
         }
 
         async function shareResults() {
-            try { await navigator.share({ title: 'Multiply to $1M', text: summaryEl.innerText, url: window.location.href }); } catch (e) { copyResults(); }
+            const data = { title: 'Multiply to $1M', text: summaryEl.innerText, url: window.location.href };
+            try { if (navigator.share) await navigator.share(data); else copyResults(); } catch (e) {}
         }
 
-        document.getElementById('theme-btn').onclick = () => {
+        themeBtn.onclick = () => {
             const t = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', t);
         };
