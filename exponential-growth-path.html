@@ -30,6 +30,7 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; transition: 0.4s ease; }
         .container { max-width: 480px; margin: 0 auto; }
         .header-top-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-top: 4px solid var(--accent); padding-top: 15px; margin-bottom: 20px; }
+        .logo-link { display: flex; align-items: center; text-decoration: none; }
         .logo-img { width: 44px; height: 44px; object-fit: contain; }
         .icon-btn { background: var(--panel); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
         .icon-btn svg { position: absolute; width: 20px; height: 20px; stroke: var(--text); stroke-width: 2; fill: none; transition: 0.4s ease; }
@@ -38,21 +39,40 @@
         .title-block { margin-bottom: 32px; }
         h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
         .subline { color: var(--sub); font-size: 15px; margin-top: 4px; }
-        .answer-block { margin: 24px 0; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; }
+        .answer-block { margin: 24px 0; padding: 20px; background: var(--panel); border-radius: 14px; border-left: 4px solid var(--accent); font-size: 15px; line-height: 1.6; }
         .content-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
-        .example-table { width: 100%; border-collapse: collapse; margin-top: 16px; background: var(--panel); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-        .example-table th, .example-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .example-table th { background: var(--accent); color: #fff; font-weight: 600; }
-        .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 24px 0; text-align: center; }
+        .content-section h2 { font-size: 18px; margin-bottom: 12px; font-weight: 600; }
+        .content-section p { font-size: 14px; color: var(--sub); line-height: 1.7; margin-bottom: 16px; }
+        
+        .insight-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-top: 16px; font-size: 14px; }
+        .insight-card strong { color: var(--text); display: block; margin-bottom: 8px; font-size: 15px; }
+
+        .graph-container { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 24px 0; text-align: center; overflow: hidden; }
         .graph-svg { width: 100%; height: auto; }
+        
+        /* Animation Logic */
+        .anim-line { stroke-dasharray: 600; stroke-dashoffset: 600; }
+        
+        /* Double (Dashed): Moderate */
+        .line-double { stroke-dasharray: 6, 6; animation: draw 4.5s linear forwards; }
+        /* Triple (Solid): Faster */
+        .line-triple { stroke-dasharray: 600; animation: draw 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        /* Quadruple (Dotted): Aggressive */
+        .line-quad { stroke-dasharray: 2, 4; animation: draw 2.5s cubic-bezier(0.5, 0, 0.1, 1) forwards; }
+
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+
         .related-section { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
+        .related-link { background: var(--panel); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: 0.3s; }
+        .related-link:hover { border-color: var(--accent); }
     </style>
 </head>
 <body data-theme="dark">
     <div class="container">
         <div class="header-top-row">
-            <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
+            <a href="/" class="logo-link">
+                <img src="xn-math-engine-logo.png" alt="Logo" class="logo-img">
+            </a>
             <div class="side-actions">
                 <div class="icon-btn" id="theme-btn">
                     <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -63,7 +83,7 @@
 
         <div class="title-block">
             <h1>Exponential Growth Path</h1>
-            <p class="subline">Analyzing the trajectory of different bases.</p>
+            <p class="subline">A mathematical model where growth is proportional to the current size.</p>
         </div>
 
         <div class="answer-block">
@@ -72,18 +92,21 @@
 
         <section class="content-section">
             <h2>The Power of the Base</h2>
-            <p>In the formula $$Base^n$$, the base is the engine. A small change here leads to a massive divergence over time.</p>
-            <table class="example-table">
-                <thead><tr><th>Base</th><th>Step 5</th><th>Step 10</th></tr></thead>
-                <tbody>
-                    <tr><td>2 (Double)</td><td>32</td><td>1,024</td></tr>
-                    <tr><td>3 (Triple)</td><td>243</td><td>59,049</td></tr>
-                    <tr><td>4 (Quadruple)</td><td>1,024</td><td>1,048,576</td></tr>
-                </tbody>
-            </table>
+            <p>The "Power of the Base" lies in the fact that even a tiny increase in \(r\) creates a disproportionate impact over time. This is because \(r\) isn't just added; it is <strong>scaled</strong> by everything that came before it.</p>
+            
+            <div class="insight-card">
+                <strong>The 1% Difference:</strong>
+                If you invest $10,000 for 30 years:<br>
+                • At 7% (Base 1.07): You end with $76,122.<br>
+                • At 8% (Base 1.08): You end with $100,626.<br><br>
+                <strong>Result:</strong> A 1% increase in the base leads to a 32% increase in the final wealth.
+            </div>
         </section>
 
-        
+        <section class="content-section">
+            <h2>The "Power of the Power"</h2>
+            <p>By doubling the base from 2 to 4, you are essentially <strong>doubling the exponent</strong> (\(n\)) in terms of the original base. Every step you take with a 4x multiplier is equivalent to taking <strong>two steps</strong> with a 2x multiplier, but those steps are taken simultaneously.</p>
+        </section>
 
         <section class="content-section">
             <h2>Comparative Trajectory</h2>
@@ -91,9 +114,12 @@
                 <svg class="graph-svg" viewBox="0 0 400 200">
                     <line x1="40" y1="180" x2="360" y2="180" stroke="var(--border)" stroke-width="1"/>
                     <line x1="40" y1="180" x2="40" y2="20" stroke="var(--border)" stroke-width="1"/>
-                    <path d="M 40 170 L 100 155 L 200 130 L 300 90 L 360 60" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4"/>
-                    <path d="M 40 170 L 100 145 L 200 100 L 300 45 L 360 15" fill="none" stroke="var(--accent)" stroke-width="2.5" />
-                    <path d="M 40 170 L 100 130 L 200 60 L 280 15" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="2 2" />
+                    
+                    <path d="M 40 170 Q 150 160 360 110" fill="none" stroke="var(--sub)" stroke-width="2" class="anim-line line-double"/>
+                    
+                    <path d="M 40 170 Q 180 140 360 40" fill="none" stroke="var(--accent)" stroke-width="2.5" class="anim-line line-triple" />
+                    
+                    <path d="M 40 170 Q 120 100 280 15" fill="none" stroke="var(--accent)" stroke-width="2.5" class="anim-line line-quad" />
                 </svg>
                 <p style="margin-top:12px; font-size:12px; color:var(--sub);">Dashed: 2x | Solid: 3x | Dotted: 4x</p>
             </div>
